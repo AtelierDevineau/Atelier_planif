@@ -5,19 +5,19 @@ st.title("Planification projets")
 "Liste des projets (à lier à excel)"
 Projets = [
     {
-     "Nom" : "Enlèvement au sérail",
-     "Début" : "2026-01-01",
-     "Fin" : "2026-05-12"
+     "title" : "Enlèvement au sérail",
+     "start" : "2026-01-01",
+     "end" : "2026-05-12"
      },
     {
-     "Nom" : "Manon Lescaut",
-     "Début" : "2026-02-03",
-     "Fin" : "2026-10-16"
+     "title" : "Manon Lescaut",
+     "start" : "2026-02-03",
+     "end" : "2026-10-16"
      },
     {
-     "Nom" : "Brundibar",
-     "Début" : "2026-03-02",
-     "Fin" : "2026-05-15"
+     "title" : "Brundibar",
+     "start" : "2026-03-02",
+     "end" : "2026-05-15"
      }
     ]
 
