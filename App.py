@@ -47,14 +47,14 @@ calendar(events = Projets, options = options)
 
 
 Ressources = {
-    "BE" : {"Abraham Lincoln",
+    "BE" : ["Abraham Lincoln",
    "Albert Einstein",
      "Marie Curie",
     "Aya Nakamura",
-     "Charlie Chaplin"}
-    "Atelier" : {
+     "Charlie Chaplin"]
+    "Atelier" : [
     "Blablabla"
-    }
+]
     }
 
 Choix_ressources = st.multiselect(
