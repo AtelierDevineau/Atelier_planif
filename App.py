@@ -2,22 +2,28 @@ import streamlit as st
 from streamlit_calendar import calendar
 st.title("Planification projets")
 
-"Liste des projets (à lier à excel)"
+#Liste des projets (à lier à excel)
 Projets = [
     {
      "title" : "Enlèvement au sérail",
      "start" : "2026-01-01",
-     "end" : "2026-05-12"
+     "end" : "2026-05-12",
+    "backgroundColor" : "#FF6C6C",
+    "borderColor":"#FF6C6C"
      },
     {
      "title" : "Manon Lescaut",
      "start" : "2026-02-03",
-     "end" : "2026-10-16"
+     "end" : "2026-10-16",
+    "backgroundColor":"#FFBD45",
+    "borderColor":"#FFBD45"    
      },
     {
      "title" : "Brundibar",
      "start" : "2026-03-02",
-     "end" : "2026-05-15"
+     "end" : "2026-05-15",
+    "backgroundColor" : "#63CDEB"
+    "borderColor":"#63CDEB"
      }
     ]
 
