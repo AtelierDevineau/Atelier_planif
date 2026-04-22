@@ -46,29 +46,18 @@ calendar(events = Projets, options = options)
 Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
 
 
-Ressources = [
-    {
-    Nom : "Abraham Lincoln",
-    Poste : "BE"
-    },  
-    {
-    Nom : "Albert Einstein",
-    Poste : "BE"
-    },
-    {
-    Nom : "Marie Curie",
-    Poste : "BE"
-    }, 
-    {
-    Nom : "Aya Nakamura",
-    Poste : "BE"
-    }, 
-    {
-    Nom : "Charlie Chaplin",
-    Poste : "BE"
-    }]
+Ressources = {
+    "BE" : {"Abraham Lincoln",
+   "Albert Einstein",
+     "Marie Curie",
+    "Aya Nakamura",
+     "Charlie Chaplin"}
+    "Atelier" : {
+    "Blablabla"
+    }
+    }
 
 Choix_ressources = st.multiselect(
     "Qui voulez-vous sélectionner ?",
-    Ressources.Nom)
+    Ressources["BE])
 st.write("Vous avez choisi : ", Choix_ressources)
