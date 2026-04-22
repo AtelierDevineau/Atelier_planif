@@ -22,7 +22,7 @@ Projets = [
      "title" : "Brundibar",
      "start" : "2026-03-02",
      "end" : "2026-05-15",
-    "backgroundColor" : "#63CDEB"
+    "backgroundColor" : "#63CDEB",
     "borderColor":"#63CDEB"
      }
     ]
