@@ -43,7 +43,7 @@ options = {
 calendar(events = Projets, options = options)
 
 #Liste des Ressources
-Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
+#Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
 
 
 Ressources = {
@@ -59,5 +59,5 @@ Ressources = {
 
 Choix_ressources = st.multiselect(
     "Qui voulez-vous sélectionner ?",
-    Ressources["BE])
+    Ressources["BE"])
 st.write("Vous avez choisi : ", Choix_ressources)
