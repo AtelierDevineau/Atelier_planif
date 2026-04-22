@@ -48,24 +48,24 @@ Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura
 
 Ressources = [
     {
-    "Nom" : "Abraham Lincoln",
-    "Poste" : "BE"
+    Nom : "Abraham Lincoln",
+    Poste : "BE"
     },  
     {
-    "Nom" : "Albert Einstein",
-    "Poste" : "BE"
+    Nom : "Albert Einstein",
+    Poste : "BE"
     },
     {
-    "Nom" : "Marie Curie",
-    "Poste" : "BE"
+    Nom : "Marie Curie",
+    Poste : "BE"
     }, 
     {
-    "Nom" : "Aya Nakamura",
-    "Poste" : "BE"
+    Nom : "Aya Nakamura",
+    Poste : "BE"
     }, 
     {
-    "Nom" : "Charlie Chaplin",
-    "Poste" : "BE"
+    Nom : "Charlie Chaplin",
+    Poste : "BE"
     }]
 
 Choix_ressources = st.multiselect(
