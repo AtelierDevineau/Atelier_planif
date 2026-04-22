@@ -70,5 +70,5 @@ Ressources = [
 
 Choix_ressources = st.multiselect(
     "Qui voulez-vous sélectionner ?",
-    Ressources["Nom"])
+    Ressources.Nom)
 st.write("Vous avez choisi : ", Choix_ressources)
