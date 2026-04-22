@@ -59,5 +59,5 @@ Ressources = {
 
 Choix_ressources = st.multiselect(
     "Qui voulez-vous sélectionner ?",
-    Ressources["BE"])
+    Ressources["BE"].values())
 st.write("Vous avez choisi : ", Choix_ressources)
