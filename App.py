@@ -41,3 +41,11 @@ options = {
 
 # Affichage du calendrier
 calendar(events = Projets, options = options)
+
+#Liste des Ressources
+Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
+
+Choix_ressources = st.multiselect(
+    "Qui voulez-vous sélectionner ?",
+    Ressources)
+st.write("Vous avez choisi : ", Choix_ressources)
