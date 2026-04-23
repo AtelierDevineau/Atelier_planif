@@ -72,10 +72,10 @@ with Calendrier:
     format_func=lambda option: Proj_ou_abs[option],
     selection_mode="single",
     )
-    if selection == "Projets" :
+    if selection == Proj_ou_abs[0] :
         # Affichage du calendrier projet
         calendar(events = Projets, options = options)
-    if selection == "Absences":
+    if selection == Proj_ou_abs[1]:
         st.write("Les chaussettes de l'achiduchesse sont-elles sèches, archi sèches ?")
  
 with Assignation:
