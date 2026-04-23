@@ -114,7 +114,7 @@ with Assignation:
    
     #Choix du projet
     Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets])
-    st.write("Vous avez choisi",Choix_projet)
+    st.header(Choix_projet)
     
     #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
