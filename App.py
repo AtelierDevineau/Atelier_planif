@@ -93,7 +93,7 @@ Projets = [
     {"Nom" : "Brundibar",
      "Client": "L'opéra Comique"
     }]
-    
+
 
 # Ajouter du contenu à chaque onglet
 with Calendrier:
@@ -116,9 +116,9 @@ with Assignation:
     st.header('Assignation des équipes')
    
     #Choix du projet
-    Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets])
+    Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet")
     
-    While Choix_projet != None:
+    If Choix_projet != None:
         st.header(Choix_projet)  
           #Sauvegarde des données
         if Choix_projet not in st.session_state.Data_proj:
