@@ -134,7 +134,17 @@ with Assignation:
                 "Budget": Budget,
             }
             st.success("✅")
-        
+    #Tableau récap
+    if st.session_state.Data_proj:
+    st.divider()
+    st.subheader("Récapitulatif")
+    st.dataframe(
+        {
+            "Projet": list(st.session_state.Data_proj.keys()),
+            "Ressources": [v.get("Nb_ressources", 0) for v in st.session_state.Data_proj.values()],
+            "Budget": [v.get("Budget", 0) for v in st.session_state.Data_proj.values()],
+        }
+    )
     
     #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
