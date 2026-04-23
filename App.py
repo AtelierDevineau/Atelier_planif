@@ -1,6 +1,11 @@
 import streamlit as st
 from streamlit_calendar import calendar
 st.title("Planification projets")
+ 
+#Onglets
+titres_onglets = ['Calendrier', 'Assignation équipe']
+Calendrier, Assignation = st.tabs(titres_onglets)
+ 
 
 #Liste des projets (à lier à excel)
 Projets = [
@@ -39,13 +44,21 @@ options = {
 }
 
 
-# Affichage du calendrier
-calendar(events = Projets, options = options)
-
 #Liste des Ressources
 Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
 
-Choix_ressources = st.multiselect(
-    "Qui voulez-vous sélectionner ?",
-    Ressources)
-st.write("Vous avez choisi : ", Choix_ressources)
+
+
+# Ajouter du contenu à chaque onglet
+with Calendrier:
+    st.header('Calendrier')
+    
+    # Affichage du calendrier
+    calendar(events = Projets, options = options)
+ 
+with Assignation:
+    st.header('Assignation des équipes')
+    Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
+    st.write("Vous avez choisi : ", Choix_ressources)
+
+
