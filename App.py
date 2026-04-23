@@ -141,13 +141,14 @@ with Assignation:
         if Choix_projet not in st.session_state.Data_proj:
             st.session_state.Data_proj[Choix_projet] = {}
         Proj_courant = st.session_state.Data_proj[Choix_projet]
-        Nb_Ress = st.number_input("Nombre Ressources", value = Proj_courant.get("Nb_ressources", 0))
-        Budget = st.number_input("Budget", value = Proj_courant.get("budget", 0))
+        Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0))
 
+        for k in range(Nb_Ress):
+            Choix_ressources = st.selectbox(f"Personne {k} :", [r["Nom"] for r in Ressources])          
+        
         if st.button("Sauvegarder"):
             st.session_state.Data_proj[Choix_projet] = {
                 "Nb_ressources": Nb_Ress,
-                "Budget": Budget,
             }
             st.success("✅")
     #Tableau récap
@@ -161,10 +162,7 @@ with Assignation:
             "Budget": [v.get("Budget", 0) for v in st.session_state.Data_proj.values()],
             }
         )
-    
-    #Choix des ressources
-    Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", [r["Nom"] for r in Ressources])
-    st.write("Vous avez choisi : ", Choix_ressources)
+   
 
     
 
