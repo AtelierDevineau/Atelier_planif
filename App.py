@@ -61,9 +61,9 @@ with Calendrier:
     # Choix entre absence ou projet
     selection = st.pills(
     " ",
-    ["Projets","Abences"],
-    #format_func=lambda option: Proj_ou_abs[option],
+    ["Projets","Asbences"],
     selection_mode="single",
+    default = "Projets"
     )
     if selection == "Projets" :
         # Affichage du calendrier projet
