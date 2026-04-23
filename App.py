@@ -117,7 +117,8 @@ with Assignation:
    
     #Choix du projet
     Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets])
-    While (Choix_projet != None):
+    
+    While Choix_projet != None:
         st.header(Choix_projet)  
           #Sauvegarde des données
         if Choix_projet not in st.session_state.Data_proj:
