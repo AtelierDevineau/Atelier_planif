@@ -114,10 +114,11 @@ with Assignation:
    
     #Choix du projet
     Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets])
-    if Choix_projet == True :
-        st.header(Choix_projet)
-    else :
+    if Choix_projet == None:
         st.header(" ")
+    else :    
+        st.header(Choix_projet)
+    
     
     #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
