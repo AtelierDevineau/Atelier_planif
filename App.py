@@ -131,7 +131,7 @@ with Assignation:
     Proj_courant["Ressources"] = st.number_input(
         "Nombre de ressources",
         min_value=1,
-        value=Proj_courant["ressources"],
+        value=Proj_courant["Ressources"],
         key=f"Ressources_{Choix_projet}"  #clé unique par projet
     )
 
