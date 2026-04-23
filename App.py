@@ -116,14 +116,13 @@ with Assignation:
    
     #Choix du projet
     Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets])
-    if Choix_projet == None:
+    if Choix_projet != None:
+        st.header(Choix_projet)  
+        #Choix nombre ressources à assigner
+        Nb_ress = st.slider("Choississez le nombre de ressources que vous voulez pour ce projet :", min_value =0, max_value=100)
+    else :
         st.header(" ")
-    else :    
-        st.header(Choix_projet)
-   
-    #Choix nombre ressources à assigner
-    Nb_ress = st.slider("Choississez le nombre de ressources que vous voulez pour ce projet :", min_value =0, max_value=100)
-    
+        
     #Sauvegarde des données
     if Choix_projet not in st.session_state.Data_proj:
          st.session_state.Data_proj[Choix_projet] = {"Ressources" : Nb_ress,"Blabla" : "blazbla"}
