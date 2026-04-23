@@ -119,22 +119,22 @@ with Assignation:
     Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets])
     if Choix_projet != None:
         st.header(Choix_projet)  
+          #Sauvegarde des données
+        if Choix_projet not in st.session_state.Data_proj:
+            st.session_state.Data_proj[Choix_projet] = {}
+        Proj_courant = st.session_state.Data_proj[Choix_projet]
+        Nb_Ress = st.number_input("Nombre Ressources", value = Proj_courant.get("Nb_ressources", 0))
+        Budget = st.number_input("Budget", value = Proj_courant.get("budget", 0))
+
+        if st.button("Sauvegarder"):
+            st.session_state.Data_proj[Choix_projet] = {
+                "Ressources": Ressources,
+                "Budget": Budget,
+            }
+            st.success("✅")
     else :
         st.header(" ")
         
-    #Sauvegarde des données
-    if Choix_projet not in st.session_state.Data_proj:
-        st.session_state.Data_proj[Choix_projet] = {}
-    Proj_courant = st.session_state.Data_proj[Choix_projet]
-    Nb_Ress = st.number_input("Nombre Ressources", value = Proj_courant.get("Nb_ressources", 0))
-    Budget = st.number_input("Budget", value = Proj_courant.get("budget", 0))
-
-    if st.button("Sauvegarder"):
-        st.session_state.projects_data[selected_project] = {
-            "Ressources": Ressources,
-            "Budget": Budget,
-        }
-        st.success("✅")
     
     #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
