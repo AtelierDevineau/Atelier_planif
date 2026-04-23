@@ -69,7 +69,7 @@ with Calendrier:
     selection = st.pills(
     " ",
     options= Proj_ou_abs.keys(),
-    format_func=lambda option: Proj_ou_abs[option]
+    format_func=lambda option: Proj_ou_abs[option],
     selection_mode="single",
     )
     if selection == "Projets" :
