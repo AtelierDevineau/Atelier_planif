@@ -86,16 +86,16 @@ Ressources = [
     {"Nom" : "Abraham Lincoln",
     "Dispo" : 100
     },
-    { "Nom":"Albert Einstein"
+    { "Nom":"Albert Einstein",
     "Dispo" : 70
     },
-    {"Nom" : "Marie Curie"
+    {"Nom" : "Marie Curie",
     "Dispo" : 100
     },
-    {"Nom" : "Aya Nakamura"
+    {"Nom" : "Aya Nakamura",
     "Dispo": 100
     },
-    {"Nom" : "Charlie Chaplin"
+    {"Nom" : "Charlie Chaplin",
     "Dispo" : 25
     }]
 #------------------------------------------------------------------------------------------
