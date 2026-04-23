@@ -148,7 +148,7 @@ with Assignation:
             for res in Ressources:
                 if res["Nom"] == Choix_ressources :
                     Dispo = res["Dispo"]
-            st.write(Choix ressources, "a", Dispo,"% de disponibilité")
+            st.write(Choix_ressources, "a", Dispo,"% de disponibilité")
             Pct_ress = st.slider("Charge de travail sur ce projet (%) :", 0,Dispo )
 
         
