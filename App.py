@@ -13,8 +13,8 @@ titres_onglets = ['Calendrier', 'Assignation équipe']
 Calendrier, Assignation = st.tabs(titres_onglets)
  
 
-#Liste des projets (à lier à excel)
-Projets = [
+#Liste des projets pour calendrier(à lier à excel)
+Projets_cal = [
     {
      "title" : "Enlèvement au sérail",
      "start" : "2026-01-01",
@@ -38,8 +38,8 @@ Projets = [
      }
     ]
 
-#Liste des absences (à lier à excel)
-Absences = [
+#Liste des absences pour calendrier (à lier à excel)
+Absences_cal = [
     {
      "title" : "Abraham Lincoln",
      "start" : "2026-04-15",
@@ -79,7 +79,18 @@ options_calendrier = {
 #Liste des Ressources
 Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
 
-
+#Liste des Projets :
+Projets = [
+    {"Nom" : "L'enlèvement au sérail",
+    "Client" : "TCE"
+    },
+    {"Nom" : "Manon Lescaut",
+     "Client" : "TCE"
+    },
+    {"Nom" : "Brundibar",
+     "Client": "L'opéra Comique"
+    }]
+    
 
 # Ajouter du contenu à chaque onglet
 with Calendrier:
@@ -94,17 +105,22 @@ with Calendrier:
     )
     if selection == "Projets" :
         # Affichage du calendrier projet
-        calendar(events = Projets, options = options_calendrier)
+        calendar(events = Projets_cal, options = options_calendrier)
     if selection == "Absences":
-        calendar(events = Absences, options = options_calendrier)
+        calendar(events = Absences_cal, options = options_calendrier)
  
 with Assignation:
     st.header('Assignation des équipes')
+   
+    #Choix du projet
+    Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets])
+    st.write("Vous avez choisi",Choix_projet)
+    
+    #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
     st.write("Vous avez choisi : ", Choix_ressources)
 
-
-
+    
 
 
 
