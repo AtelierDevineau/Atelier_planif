@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_calendar import calendar
 
+Nb_ress= 0
 # Logo centré en haut de page
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
