@@ -61,7 +61,7 @@ with Calendrier:
     # Choix entre absence ou projet
     selection = st.pills(
     " ",
-    ["Projets","Asbences"],
+    ["Projets","Absences"],
     selection_mode="single",
     default = "Projets"
     )
