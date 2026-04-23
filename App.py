@@ -38,8 +38,34 @@ Projets = [
      }
     ]
 
+#Liste des absences (à lier à excel)
+Absences = [
+    {
+     "title" : "Abraham Lincoln",
+     "start" : "2026-04-15",
+     "end" : "2026-04-25",
+    "backgroundColor" : "#FF6C6C",
+    "borderColor":"#FF6C6C"
+     },
+    {
+     "title" : "Aya Nakamura",
+     "start" : "2026-04-21",
+     "end" : "2026-04-23",
+    "backgroundColor":"#FFBD45",
+    "borderColor":"#FFBD45"    
+     },
+    {
+     "title" : "Charlie Chaplin",
+     "start" : "2026-04-02",
+     "end" : "2026-04-12",
+    "backgroundColor" : "#63CDEB",
+    "borderColor":"#63CDEB"
+     }
+    ]
+    
+
 # Options calendrier
-options = {
+options_calendrier = {
     "initialView": "dayGridMonth",
     "locale": "fr",
     "headerToolbar": {
@@ -58,6 +84,7 @@ Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura
 # Ajouter du contenu à chaque onglet
 with Calendrier:
     st.header('Calendrier')
+    
     # Choix entre absence ou projet
     selection = st.pills(
     " ",
@@ -67,9 +94,9 @@ with Calendrier:
     )
     if selection == "Projets" :
         # Affichage du calendrier projet
-        calendar(events = Projets, options = options)
+        calendar(events = Projets, options = options_calendrier)
     if selection == "Absences":
-        st.write("Les chaussettes de l'achiduchesse sont-elles sèches, archi sèches ?")
+        calendar(events = Absences, options = options_calendrier)
  
 with Assignation:
     st.header('Assignation des équipes')
