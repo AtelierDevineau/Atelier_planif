@@ -14,7 +14,8 @@ titres_onglets = ['Calendrier', 'Assignation équipe']
 Calendrier, Assignation = st.tabs(titres_onglets)
 
 #Données projets
-st.session_state.Data_proj = {}
+if "Data_proj" not in st.session_state:
+    st.session_state.Data_proj = {}
 
 #Liste des projets pour calendrier(à lier à excel)
 Projets_cal = [
