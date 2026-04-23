@@ -54,13 +54,6 @@ options = {
 Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
 
 
-#Choisir entre calendrier projet et absences
-Proj_ou_abs = {
-    0: "Projets",
-    1: "Absences"
-}
-
-
 
 # Ajouter du contenu à chaque onglet
 with Calendrier:
@@ -68,14 +61,14 @@ with Calendrier:
     # Choix entre absence ou projet
     selection = st.pills(
     " ",
-    options= Proj_ou_abs.keys(),
-    format_func=lambda option: Proj_ou_abs[option],
+    ["Projets","Abences"],
+    #format_func=lambda option: Proj_ou_abs[option],
     selection_mode="single",
     )
-    if selection == Proj_ou_abs[0] :
+    if selection == "Projets" :
         # Affichage du calendrier projet
         calendar(events = Projets, options = options)
-    if selection == Proj_ou_abs[1]:
+    if selection == "Absences":
         st.write("Les chaussettes de l'achiduchesse sont-elles sèches, archi sèches ?")
  
 with Assignation:
