@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_calendar import calendar
 
-Nb_ress= 0
+
 # Logo centré en haut de page
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
@@ -126,15 +126,18 @@ with Assignation:
         
     #Sauvegarde des données
     if Choix_projet not in st.session_state.Data_proj:
-        st.session_state.Data_proj[Choix_projet] = {"Ressources" : Nb_ress}
+        st.session_state.Data_proj[Choix_projet] = {}
     Proj_courant = st.session_state.Data_proj[Choix_projet]
-    Proj_courant["Ressources"] = st.number_input(
-        "Nombre de ressources",
-        min_value=1,
-        value=Proj_courant["Ressources"],
-        key=f"Ressources_{Choix_projet}"  #clé unique par projet
-    )
+    Nb_Ress = st.number_input("Nombre Ressources", value = Proj_courant.get("Nb_ressources", 0))
+    Budget = st.number_input("Budget", value = Proj_courant.get("budget", 0))
 
+    if st.button("Sauvegarder"):
+        st.session_state.projects_data[selected_project] = {
+            "Ressources": Ressources,
+            "Budget": Budget,
+        }
+        st.success("✅")
+    
     #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
     st.write("Vous avez choisi : ", Choix_ressources)
