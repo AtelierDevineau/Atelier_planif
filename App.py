@@ -71,7 +71,7 @@ with Calendrier:
     options=option_map.keys(),
     selection_mode="single",
     )
-    if
+
     # Affichage du calendrier
     calendar(events = Projets, options = options)
  
