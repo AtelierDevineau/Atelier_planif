@@ -130,7 +130,7 @@ with Assignation:
 
         if st.button("Sauvegarder"):
             st.session_state.Data_proj[Choix_projet] = {
-                "Ressources": Ressources,
+                "Ressources": Nb_Ress,
                 "Budget": Budget,
             }
             st.success("✅")
