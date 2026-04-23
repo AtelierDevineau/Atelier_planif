@@ -118,7 +118,7 @@ with Assignation:
    
     #Choix du projet
     Choix_projet = st.selectbox("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet")
-    st.write(st.session_state)
+  
     if Choix_projet != None:
         st.header(Choix_projet)  
           #Sauvegarde des données
