@@ -1,7 +1,13 @@
 import streamlit as st
 from streamlit_calendar import calendar
 st.title("Planification projets")
- 
+
+# ---- Logo centré en haut de page ----
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("ATELIER DEVINEAU_white.png", use_container_width=True)
+
+
 #Onglets
 titres_onglets = ['Calendrier', 'Assignation équipe']
 Calendrier, Assignation = st.tabs(titres_onglets)
