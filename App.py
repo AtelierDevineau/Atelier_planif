@@ -65,17 +65,13 @@ option_map = {
 # Ajouter du contenu à chaque onglet
 with Calendrier:
     st.header('Calendrier')
-    
+    # Choix entre absence ou projet
     selection = st.pills(
     " ",
     options=option_map.keys(),
-    format_func=lambda option: option_map[option],
     selection_mode="single",
     )
-    st.write(
-    "Your selected option: "
-    f"{None if selection is None else option_map[selection]}"
-    )
+    if
     # Affichage du calendrier
     calendar(events = Projets, options = options)
  
