@@ -1,12 +1,12 @@
 import streamlit as st
 from streamlit_calendar import calendar
-st.title("Planification projets")
 
 # ---- Logo centré en haut de page ----
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.image("Atelier Devineau logo.png", use_container_width=True)
 
+st.title("Planification projets")
 
 #Onglets
 titres_onglets = ['Calendrier', 'Assignation équipe']
