@@ -6,17 +6,18 @@ from streamlit_calendar import calendar
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.image("Atelier Devineau logo.png", use_container_width=True)
-
+#------------------------------------------------------------------------------------------
 st.title("Planification projets")
-
+#------------------------------------------------------------------------------------------
 #Onglets
 titres_onglets = ['Calendrier', 'Assignation équipe']
 Calendrier, Assignation = st.tabs(titres_onglets)
-
+#------------------------------------------------------------------------------------------
 #Données projets
 if "Data_proj" not in st.session_state:
     st.session_state.Data_proj = {}
 
+#------------------------------------------------------------------------------------------
 #Liste des projets pour calendrier(à lier à excel)
 Projets_cal = [
     {
@@ -41,7 +42,7 @@ Projets_cal = [
     "borderColor":"#63CDEB"
      }
     ]
-
+#------------------------------------------------------------------------------------------
 #Liste des absences pour calendrier (à lier à excel)
 Absences_cal = [
     {
@@ -66,7 +67,7 @@ Absences_cal = [
     "borderColor":"#63CDEB"
      }
     ]
-    
+ #------------------------------------------------------------------------------------------   
 
 # Options calendrier
 options_calendrier = {
@@ -79,10 +80,25 @@ options_calendrier = {
     }
 }
 
-
+#------------------------------------------------------------------------------------------
 #Liste des Ressources
-Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
-
+Ressources = [
+    {"Nom" : "Abraham Lincoln",
+    "Dispo" : 100
+    },
+    { "Nom":"Albert Einstein"
+    "Dispo" : 70
+    },
+    {"Nom" : "Marie Curie"
+    "Dispo" : 100
+    },
+    {"Nom" : "Aya Nakamura"
+    "Dispo": 100
+    },
+    {"Nom" : "Charlie Chaplin"
+    "Dispo" : 25
+    }]
+#------------------------------------------------------------------------------------------
 #Liste des Projets :
 Projets = [
     {"Nom" : "L'enlèvement au sérail",
@@ -95,7 +111,7 @@ Projets = [
      "Client": "L'opéra Comique"
     }]
 
-
+#------------------------------------------------------------------------------------------
 # Ajouter du contenu à chaque onglet
 with Calendrier:
     st.header('Calendrier')
@@ -147,7 +163,7 @@ with Assignation:
         )
     
     #Choix des ressources
-    Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
+    Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", [r["Nom"] for r in Ressources])
     st.write("Vous avez choisi : ", Choix_ressources)
 
     
