@@ -5,7 +5,7 @@ st.title("Planification projets")
 # ---- Logo centré en haut de page ----
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("ATELIER DEVINEAU_white.png", use_container_width=True)
+    st.image("Atelier devineau_black.png", use_container_width=True)
 
 
 #Onglets
