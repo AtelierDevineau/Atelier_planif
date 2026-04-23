@@ -126,9 +126,7 @@ with Assignation:
     
     #Sauvegarde des données
     if Choix_projet not in st.session_state.Data_proj:
-         st.session_state.Data_proj[Choix_projet] = 
-        {"Ressources" : Nb_ress,
-         "Blabla" : "blazbla"}
+         st.session_state.Data_proj[Choix_projet] = {"Ressources" : Nb_ress,"Blabla" : "blazbla"}
     
     #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
