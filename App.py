@@ -55,7 +55,7 @@ Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura
 
 
 #Choisir entre calendrier projet et absences
-option_map = {
+Proj_ou_abs = {
     0: "Projets",
     1: "Absences"
 }
@@ -68,12 +68,15 @@ with Calendrier:
     # Choix entre absence ou projet
     selection = st.pills(
     " ",
-    options=option_map.keys(),
+    options= Proj_ou_abs.keys(),
+    format_func=lambda option: Proj_ou_abs[option]
     selection_mode="single",
     )
-
-    # Affichage du calendrier
-    calendar(events = Projets, options = options)
+    if selection == "Projets" :
+        # Affichage du calendrier projet
+        calendar(events = Projets, options = options)
+    if selection == "Absences":
+        st.write("Les chaussettes de l'achiduchesse sont-elles sèches, archi sèches ?")
  
 with Assignation:
     st.header('Assignation des équipes')
