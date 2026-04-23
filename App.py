@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_calendar import calendar
 
-# ---- Logo centré en haut de page ----
+# Logo centré en haut de page
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.image("Atelier Devineau logo.png", use_container_width=True)
@@ -11,7 +11,9 @@ st.title("Planification projets")
 #Onglets
 titres_onglets = ['Calendrier', 'Assignation équipe']
 Calendrier, Assignation = st.tabs(titres_onglets)
- 
+
+#Données projets
+st.session_state.Data_proj = {}
 
 #Liste des projets pour calendrier(à lier à excel)
 Projets_cal = [
@@ -118,7 +120,15 @@ with Assignation:
         st.header(" ")
     else :    
         st.header(Choix_projet)
+   
+    #Choix nombre ressources à assigner
+    Nb_ress = st.slider("Choississez le nombre de ressources que vous voulez pour ce projet :", min_value =0, max_value=100)
     
+    #Sauvegarde des données
+    if Choix_projet not in st.session_state.Data_proj:
+         st.session_state.Data_proj[Choix_projet] = 
+        {"Ressources" : Nb_ress,
+         "Blabla" : "blazbla"}
     
     #Choix des ressources
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
