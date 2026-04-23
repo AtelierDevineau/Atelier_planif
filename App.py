@@ -117,7 +117,7 @@ with Assignation:
     st.header('Assignation des équipes')
    
     #Choix du projet
-    Choix_projet = st.menu_button("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet")
+    Choix_projet = st.selectbox("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet")
     st.write(st.session_state)
     if Choix_projet != None:
         st.header(Choix_projet)  
