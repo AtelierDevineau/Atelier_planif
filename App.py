@@ -54,11 +54,28 @@ options = {
 Ressources = ["Abraham Lincoln", "Albert Einstein", "Marie Curie", "Aya Nakamura", "Charlie Chaplin"]
 
 
+#Choisir entre calendrier projet et absences
+option_map = {
+    0: "Projets",
+    1: "Absences"
+}
+
+
 
 # Ajouter du contenu à chaque onglet
 with Calendrier:
     st.header('Calendrier')
     
+    selection = st.pills(
+    " ",
+    options=option_map.keys(),
+    format_func=lambda option: option_map[option],
+    selection_mode="single",
+    )
+    st.write(
+    "Your selected option: "
+    f"{None if selection is None else option_map[selection]}"
+    )
     # Affichage du calendrier
     calendar(events = Projets, options = options)
  
@@ -66,5 +83,23 @@ with Assignation:
     st.header('Assignation des équipes')
     Choix_ressources = st.multiselect("Qui voulez-vous sélectionner ?", Ressources)
     st.write("Vous avez choisi : ", Choix_ressources)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
