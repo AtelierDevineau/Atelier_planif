@@ -147,7 +147,7 @@ with Assignation:
             Choix_ressources = st.selectbox(f"Personne {k+1} :", [r["Nom"] for r in Ressources])  
             Dispo = next(r["Dispo"] for r in Ressources if r["Nom"] == Choix_ressources)
             st.write(Choix_ressources, "a", Dispo,"% de disponibilité")
-            Pct_ress = st.slider("Charge de travail sur ce projet (%) :",min_value= 0,max_value=Dispo )
+            Pct_ress = st.slider("Charge de travail sur ce projet (%) :",min_value= 0,max_value=Dispo, key=f"slider_pct_ress{k+1}")
 
         
         if st.button("Sauvegarder"):
