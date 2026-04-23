@@ -144,7 +144,13 @@ with Assignation:
         Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0))
 
         for k in range(Nb_Ress):
-            Choix_ressources = st.selectbox(f"Personne {k} :", [r["Nom"] for r in Ressources])          
+            Choix_ressources = st.selectbox(f"Personne {k+1} :", [r["Nom"] for r in Ressources])  
+            for res in Ressources:
+                if res["Nom"] == Choix_ressources :
+                    Dispo = res["Dispo"]
+            st.write(Choix ressources, "a", Dispo,"% de disponibilité")
+            Pct_ress = st.slider("Charge de travail sur ce projet (%) :", 0,Dispo )
+
         
         if st.button("Sauvegarder"):
             st.session_state.Data_proj[Choix_projet] = {
