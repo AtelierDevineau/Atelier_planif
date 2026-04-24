@@ -53,7 +53,7 @@ Absences_cal = [
     ]
 
 # Options calendrier
-options_calendrier = {
+Options_cal = {
     "initialView": "dayGridMonth",
     "locale": "fr",
     "headerToolbar": {
