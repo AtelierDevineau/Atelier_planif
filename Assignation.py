@@ -85,14 +85,14 @@ def assignation_tab():
     #Détail par ressource
     lignes = []
     for nom_proj, data in st.session_state.Data_proj.items():
-      for a in data.get("Assignation",[]):
+      for a in data.get("Assignations",[]):
         lignes.append({
           "Ressource" : a["Nom"],
           "Projet" : nom_proj,
           "Charge (%)" : a["Pct"],
         })
     if lignes:
-      df= pd.DataFrames(lignes)
+      df= pd.DataFrame(lignes)
       #Pivot lignes/colonnes
       df_pivot = df.pivot_table(
             index="Ressource",
