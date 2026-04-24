@@ -1,5 +1,5 @@
 import streamlit as st
-from data import Projets, Ressources_base
+from donnees import Projets, Ressources_base
 
 def assignation_tab():
   """Affiche le contenu de l'onglet Assignation des équipes"""
@@ -12,8 +12,7 @@ def assignation_tab():
   
   if Choix_projet != None:
     st.header(Choix_projet)
-      
-  #Sauvegarde des données
+    #Sauvegarde des données
     if Choix_projet not in st.session_state.Data_proj:
       st.session_state.Data_proj[Choix_projet] = {}
         
