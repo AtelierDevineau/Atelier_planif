@@ -129,13 +129,13 @@ with Assignation:
         if Choix_projet not in st.session_state.Data_proj:
             st.session_state.Data_proj[Choix_projet] = {}
         Proj_courant = st.session_state.Data_proj[Choix_projet]
-        Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0))
+        Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}")
 
         for k in range(Nb_Ress):
-            Choix_ressources = st.selectbox(f"Personne {k+1} :", [r["Nom"] for r in st.session_state.Ressources])  
+            Choix_ressources = st.selectbox(f"Personne {k+1} :", [r["Nom"] for r in st.session_state.Ressources], key=f"slider_pct_ress_{Choix_projet}_{k}")  
             Dispo = next(r["Dispo"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
             st.write(Choix_ressources, "a", Dispo,"% de disponibilité")
-            Pct_ress = st.slider("Charge de travail sur ce projet (%) :",min_value= 0,max_value=Dispo, key=f"slider_pct_ress{k+1}")
+            Pct_ress = st.slider("Charge de travail sur ce projet (%) :",min_value= 0,max_value=Dispo, key=f"slider_pct_ress_{Choix_projet}_{k+1}")
             # Compter les % d'assignation pour maj
             assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
         
