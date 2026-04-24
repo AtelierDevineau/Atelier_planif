@@ -154,7 +154,7 @@ with Assignation:
             for a in assignation_en_cours:
                 for r in st.session_state.Ressources:
                     if r["Nom"] == a["Nom"]:
-                        r["Dispo"] = r["Dispo"] - a["Pct"]
+                        r["Dispo_restante"] = r["Dispo_restante"] - a["Pct"]
                         
             st.session_state.Data_proj[Choix_projet] = {
                 "Nb_ressources": Nb_Ress,
