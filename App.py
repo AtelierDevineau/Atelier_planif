@@ -1,214 +1,24 @@
 import streamlit as st
-from streamlit_calendar import calendar
+from Data import init_session_state
+from Calendrier import calendrier_tab
+from Assignation import assignation_tab
 
+# ── Init ──────────────────────────────────────────────────────────────────────
+init_session_state()
 
-# Logo centré en haut de page
+# ── Logo ──────────────────────────────────────────────────────────────────────
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.image("Atelier Devineau logo.png", use_container_width=True)
-#------------------------------------------------------------------------------------------
+
+# ── Titre ─────────────────────────────────────────────────────────────────────
 st.title("Planification projets")
-#------------------------------------------------------------------------------------------
-#Onglets
-titres_onglets = ['Calendrier', 'Assignation équipe']
-Calendrier, Assignation = st.tabs(titres_onglets)
-#------------------------------------------------------------------------------------------
-#Données projets
-if "Data_proj" not in st.session_state:
-    st.session_state.Data_proj = {}
 
-#------------------------------------------------------------------------------------------
-#Liste des projets pour calendrier(à lier à excel)
-Projets_cal = [
-    {
-     "title" : "Enlèvement au sérail",
-     "start" : "2026-01-01",
-     "end" : "2026-05-12",
-    "backgroundColor" : "#FF6C6C",
-    "borderColor":"#FF6C6C"
-     },
-    {
-     "title" : "Manon Lescaut",
-     "start" : "2026-02-03",
-     "end" : "2026-10-16",
-    "backgroundColor":"#FFBD45",
-    "borderColor":"#FFBD45"    
-     },
-    {
-     "title" : "Brundibar",
-     "start" : "2026-03-02",
-     "end" : "2026-05-15",
-    "backgroundColor" : "#63CDEB",
-    "borderColor":"#63CDEB"
-     }
-    ]
-#------------------------------------------------------------------------------------------
-#Liste des absences pour calendrier (à lier à excel)
-Absences_cal = [
-    {
-     "title" : "Abraham Lincoln",
-     "start" : "2026-04-15",
-     "end" : "2026-04-25",
-    "backgroundColor" : "#FF6C6C",
-    "borderColor":"#FF6C6C"
-     },
-    {
-     "title" : "Aya Nakamura",
-     "start" : "2026-04-21",
-     "end" : "2026-04-23",
-    "backgroundColor":"#FFBD45",
-    "borderColor":"#FFBD45"    
-     },
-    {
-     "title" : "Charlie Chaplin",
-     "start" : "2026-04-02",
-     "end" : "2026-04-12",
-    "backgroundColor" : "#63CDEB",
-    "borderColor":"#63CDEB"
-     }
-    ]
- #------------------------------------------------------------------------------------------   
+# ── Onglets ───────────────────────────────────────────────────────────────────
+Calendrier, Assignation = st.tabs(["Calendrier", "Assignation équipe"])
 
-# Options calendrier
-options_calendrier = {
-    "initialView": "dayGridMonth",
-    "locale": "fr",
-    "headerToolbar": {
-        "left": "prev,next today",
-        "center": "title",
-        "right": "dayGridMonth,timeGridWeek,timeGridDay"
-    }
-}
-
-#------------------------------------------------------------------------------------------
-#Liste des Ressources de base
-Ressources_base= [
-    {"Nom" : "Abraham Lincoln", "Dispo_base" : 100},
-    { "Nom":"Albert Einstein", "Dispo_base" : 70},
-    {"Nom" : "Marie Curie", "Dispo_base" : 100},
-    {"Nom" : "Aya Nakamura", "Dispo_base": 100},
-    {"Nom" : "Charlie Chaplin", "Dispo_base" : 25}
-    ]
-#------------------------------------------------------------------------------------------
-#Liste des Ressources qui vont bouger
-if "Ressources" not in st.session_state:
-    st.session_state.Ressources= [
-    {"Nom" : "Abraham Lincoln", "Dispo_restante" : 100},
-    { "Nom":"Albert Einstein", "Dispo_restante" : 70},
-    {"Nom" : "Marie Curie", "Dispo_restante" : 100},
-    {"Nom" : "Aya Nakamura", "Dispo_restante": 100},
-    {"Nom" : "Charlie Chaplin", "Dispo_restante" : 25}
-    ]
-#------------------------------------------------------------------------------------------
-#Liste des Projets :
-Projets = [
-    {"Nom" : "L'enlèvement au sérail","Client" : "TCE"},
-    {"Nom" : "Manon Lescaut", "Client" : "TCE"},
-    {"Nom" : "Brundibar", "Client": "L'opéra Comique"}
-    ]
-
-#------------------------------------------------------------------------------------------
-# Ajouter du contenu à chaque onglet
 with Calendrier:
-    st.header('Calendrier')
-    
-    # Choix entre absence ou projet
-    selection = st.pills(
-    " ",
-    ["Projets","Absences"],
-    selection_mode="single",
-    default = "Projets"
-    )
-    if selection == "Projets" :
-        # Affichage du calendrier projet
-        calendar(events = Projets_cal, options = options_calendrier)
-    if selection == "Absences":
-        calendar(events = Absences_cal, options = options_calendrier)
- 
+    calendrier_tab()
+
 with Assignation:
-    st.header('Assignation des équipes')
-    assignation_en_cours = []
-    
-    #Choix du projet
-    Choix_projet = st.selectbox("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet")
-  
-    if Choix_projet != None:
-        st.header(Choix_projet)  
-          #Sauvegarde des données
-        if Choix_projet not in st.session_state.Data_proj:
-            st.session_state.Data_proj[Choix_projet] = {}
-        Proj_courant = st.session_state.Data_proj[Choix_projet]
-        Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}")
-
-
-        for k in range(Nb_Ress):
-            # Préparation des valeurs sauvegardées pour donner les index nécessaires aux widgets
-            noms_ressources = [r["Nom"] for r in st.session_state.Ressources]
-            assignations_sauvegardees = Proj_courant.get("Assignations", [])
-
-                
-            if k < len(assignations_sauvegardees): #Permet que si on n'a assigné que 2 personnes, il n'ne cherche pas 3
-                nom_sauvegarde = assignations_sauvegardees[k]["Nom"]
-                #Donne le nom sur lequel le multiselect va se mettre par défaut, surtout pratique si anciennes sauvegardes
-                default_index = noms_ressources.index(nom_sauvegarde) if nom_sauvegarde in noms_ressources else 0 
-                #Garde aussi le pourcentage
-                pct_sauvegarde = assignations_sauvegardees[k]["Pct"]
-            else:
-                #Sinon on garde les paramètres par défaut (projet non touché)
-                default_index = 0
-                pct_sauvegarde = 0
-
-            #On ne pioche pas le nom de la personne dans le session state Ressources, mais bien dans la liste avec l'index qui nous intéresse pour se souvenir de ce qui a été modifié
-            Choix_ressources = st.selectbox(f"Personne {k+1} :", noms_ressources, index=default_index, key=f"select_ress_{Choix_projet}_{k}")   
-            #Calcul des dispos
-            Dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == Choix_ressources)
-            Dispo_restante = next(r["Dispo_restante"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
-            st.write(Choix_ressources, "a", Dispo_restante, "% de disponibilité")
-             
-            # Pourcentage restant, pareil on dit clairement si ça a déjà été modifié
-            Pct_ress = st.slider("Charge de travail sur ce projet (%) :", min_value=0, max_value=Dispo_base, value=pct_sauvegarde, key=f"slider_ress_{Choix_projet}_{k}")
-           
-            # Compter les % d'assignation pour maj
-            assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
-        
-        if st.button("Sauvegarder"):
-               # Mise à jour de la liste Ressources
-            for a in assignation_en_cours:
-                for r in st.session_state.Ressources:
-                    if r["Nom"] == a["Nom"]:
-                        r["Dispo_restante"] = r["Dispo_restante"] - a["Pct"]
-                        
-            st.session_state.Data_proj[Choix_projet] = {
-                "Nb_ressources": Nb_Ress,
-            "Assignations" : assignation_en_cours}
-            st.success("✅")
-    #Tableau récap
-    if st.session_state.Data_proj:
-        st.divider()
-        st.subheader("Récapitulatif")
-        st.dataframe(
-            {
-            "Projet": list(st.session_state.Data_proj.keys()),
-            "Ressources": [v.get("Nb_ressources", 0) for v in st.session_state.Data_proj.values()],
-            }
-        )
-   
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    assignation_tab()
