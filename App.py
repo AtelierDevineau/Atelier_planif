@@ -83,33 +83,19 @@ options_calendrier = {
 #------------------------------------------------------------------------------------------
 #Liste des Ressources
 Ressources = [
-    {"Nom" : "Abraham Lincoln",
-    "Dispo" : 100
-    },
-    { "Nom":"Albert Einstein",
-    "Dispo" : 70
-    },
-    {"Nom" : "Marie Curie",
-    "Dispo" : 100
-    },
-    {"Nom" : "Aya Nakamura",
-    "Dispo": 100
-    },
-    {"Nom" : "Charlie Chaplin",
-    "Dispo" : 25
-    }]
+    {"Nom" : "Abraham Lincoln", "Dispo" : 100},
+    { "Nom":"Albert Einstein", "Dispo" : 70},
+    {"Nom" : "Marie Curie", "Dispo" : 100},
+    {"Nom" : "Aya Nakamura", "Dispo": 100},
+    {"Nom" : "Charlie Chaplin", "Dispo" : 25}
+    ]
 #------------------------------------------------------------------------------------------
 #Liste des Projets :
 Projets = [
-    {"Nom" : "L'enlèvement au sérail",
-    "Client" : "TCE"
-    },
-    {"Nom" : "Manon Lescaut",
-     "Client" : "TCE"
-    },
-    {"Nom" : "Brundibar",
-     "Client": "L'opéra Comique"
-    }]
+    {"Nom" : "L'enlèvement au sérail","Client" : "TCE"},
+    {"Nom" : "Manon Lescaut", "Client" : "TCE"},
+    {"Nom" : "Brundibar", "Client": "L'opéra Comique"}
+    ]
 
 #------------------------------------------------------------------------------------------
 # Ajouter du contenu à chaque onglet
