@@ -53,18 +53,18 @@ def assignation_tab():
            
       # Compter les % d'assignation pour maj
       assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
-      #-------------SAUVEGARDE---------------------------------  
-      if st.button("Sauvegarder"):
-        # Mise à jour de la liste Ressources
-        for a in assignation_en_cours:
-          for r in st.session_state.Ressources:
-            if r["Nom"] == a["Nom"]:
-              r["Dispo_restante"] = r["Dispo_restante"] - a["Pct"]
+    #-------------SAUVEGARDE---------------------------------  
+    if st.button("Sauvegarder"):
+      # Mise à jour de la liste Ressources
+      for a in assignation_en_cours:
+        for r in st.session_state.Ressources:
+          if r["Nom"] == a["Nom"]:
+            r["Dispo_restante"] = r["Dispo_restante"] - a["Pct"]
                         
-      st.session_state.Data_proj[Choix_projet] = {
-          "Nb_ressources": Nb_Ress,
-          "Assignations" : assignation_en_cours}
-           st.success("✅")
+    st.session_state.Data_proj[Choix_projet] = {
+        "Nb_ressources": Nb_Ress,
+        "Assignations" : assignation_en_cours}
+    st.success("✅")
     
   #----------------TABLEAU RECAP---------------------------------------------
   if st.session_state.Data_proj:
