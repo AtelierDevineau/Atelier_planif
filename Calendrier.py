@@ -14,7 +14,7 @@ def calendrier_tab():
   )
   if selection == "Projets" :
     # Affichage du calendrier projet
-    calendar(events = Projets_cal, options = options_cal)
+    calendar(events = Projets_cal, options = Options_cal)
   if selection == "Absences":
-    calendar(events = Absences_cal, options = options_cal)
+    calendar(events = Absences_cal, options = Options_cal)
    
