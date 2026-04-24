@@ -54,22 +54,22 @@ def assignation_tab():
       assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
     #-------------SAUVEGARDE---------------------------------  
     if st.button("Sauvegarder"):
-    # On repart des dispos de base
-    for r in st.session_state.Ressources:
-        r["Dispo_restante"] = next(rb["Dispo_base"] for rb in Ressources_base if rb["Nom"] == r["Nom"])
+      # On repart des dispos de base
+      for r in st.session_state.Ressources:
+          r["Dispo_restante"] = next(rb["Dispo_base"] for rb in Ressources_base if rb["Nom"] == r["Nom"])
     
-    # On sauvegarde d'abord
-    st.session_state.Data_proj[Choix_projet] = {
+      # On sauvegarde d'abord
+      st.session_state.Data_proj[Choix_projet] = {
         "Nb_ressources": Nb_Ress,
         "Assignations": assignation_en_cours
-    }
+      }
     
-    # Puis on recalcule en tenant compte de TOUS les projets sauvegardés
-    for proj, data in st.session_state.Data_proj.items():
+      # Puis on recalcule en tenant compte de TOUS les projets sauvegardés
+      for proj, data in st.session_state.Data_proj.items():
         for a in data.get("Assignations", []):
-            for r in st.session_state.Ressources:
-                if r["Nom"] == a["Nom"]:
-                    r["Dispo_restante"] -= a["Pct"]
+          for r in st.session_state.Ressources:
+            if r["Nom"] == a["Nom"]:
+              r["Dispo_restante"] -= a["Pct"]
     
     st.success("✅")
     
