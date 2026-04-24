@@ -82,7 +82,8 @@ options_calendrier = {
 
 #------------------------------------------------------------------------------------------
 #Liste des Ressources
-Ressources = [
+if "Ressources" not in st.session_state:
+    st.session_state.Ressources= [
     {"Nom" : "Abraham Lincoln", "Dispo" : 100},
     { "Nom":"Albert Einstein", "Dispo" : 70},
     {"Nom" : "Marie Curie", "Dispo" : 100},
@@ -117,7 +118,8 @@ with Calendrier:
  
 with Assignation:
     st.header('Assignation des équipes')
-   
+    assignation_en_cours = []
+    
     #Choix du projet
     Choix_projet = st.selectbox("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet")
   
@@ -130,16 +132,23 @@ with Assignation:
         Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0))
 
         for k in range(Nb_Ress):
-            Choix_ressources = st.selectbox(f"Personne {k+1} :", [r["Nom"] for r in Ressources])  
-            Dispo = next(r["Dispo"] for r in Ressources if r["Nom"] == Choix_ressources)
+            Choix_ressources = st.selectbox(f"Personne {k+1} :", [r["Nom"] for r in st.session_state.Ressources])  
+            Dispo = next(r["Dispo"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
             st.write(Choix_ressources, "a", Dispo,"% de disponibilité")
             Pct_ress = st.slider("Charge de travail sur ce projet (%) :",min_value= 0,max_value=Dispo, key=f"slider_pct_ress{k+1}")
-
+            # Compter les % d'assignation pour maj
+            assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
         
         if st.button("Sauvegarder"):
+               # Mise à jour de la liste Ressources
+            for a in assignations_en_cours:
+                for r in Ressources:
+                    if r["Nom"] == a["Nom"]:
+                        r["Dispo"] = r["Dispo"] - a["Pct"]
+                        
             st.session_state.Data_proj[Choix_projet] = {
                 "Nb_ressources": Nb_Ress,
-            }
+            "Assignations" : assignation_en_cours}
             st.success("✅")
     #Tableau récap
     if st.session_state.Data_proj:
