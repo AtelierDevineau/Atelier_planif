@@ -163,7 +163,6 @@ with Assignation:
             {
             "Projet": list(st.session_state.Data_proj.keys()),
             "Ressources": [v.get("Nb_ressources", 0) for v in st.session_state.Data_proj.values()],
-            "Budget": [v.get("Budget", 0) for v in st.session_state.Data_proj.values()],
             }
         )
    
