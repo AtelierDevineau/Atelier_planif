@@ -1,5 +1,6 @@
 import streamlit as st
 from donnees import Projets, Ressources_base
+import pandas as pd
 
 def assignation_tab():
   """Affiche le contenu de l'onglet Assignation des équipes"""
@@ -81,8 +82,26 @@ def assignation_tab():
       {"Projet": list(st.session_state.Data_proj.keys()),
       "Ressources": [v.get("Nb_ressources", 0) for v in st.session_state.Data_proj.values()]}
         )
-   
-
+    #Détail par ressource
+    lignes = []
+    for nom_proj, data in st.session_state.Data_proj.items():
+      for a in data.get("Assignation",[]):
+        lignes.append({
+          "Ressource" : a["Nom"],
+          "Projet" : nom_proj,
+          "Charge (%)" : a["Pct"],
+        })
+    if lignes:
+      df= pd.DataFrames(lignes)
+      #Pivot lignes/colonnes
+      df_pivot = df.pivot_table(
+            index="Ressource",
+            columns="Projet",
+            values="Charge (%)",
+            aggfunc="sum"
+        ).fillna(0).astype(int)
+    
+      st.dataframe(df_pivot, use_container_width=True)
     
 
 
