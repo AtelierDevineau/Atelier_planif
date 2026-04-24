@@ -81,7 +81,16 @@ options_calendrier = {
 }
 
 #------------------------------------------------------------------------------------------
-#Liste des Ressources
+#Liste des Ressources de base
+Ressources_base= [
+    {"Nom" : "Abraham Lincoln", "Dispo_base" : 100},
+    { "Nom":"Albert Einstein", "Dispo_base" : 70},
+    {"Nom" : "Marie Curie", "Dispo_base" : 100},
+    {"Nom" : "Aya Nakamura", "Dispo_base": 100},
+    {"Nom" : "Charlie Chaplin", "Dispo_base" : 25}
+    ]
+#------------------------------------------------------------------------------------------
+#Liste des Ressources qui vont bouger
 if "Ressources" not in st.session_state:
     st.session_state.Ressources= [
     {"Nom" : "Abraham Lincoln", "Dispo" : 100},
@@ -133,9 +142,10 @@ with Assignation:
 
         for k in range(Nb_Ress):
             Choix_ressources = st.selectbox(f"Personne {k+1} :", [r["Nom"] for r in st.session_state.Ressources], key=f"select_ress_{Choix_projet}_{k}")  
-            Dispo = next(r["Dispo"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
-            st.write(Choix_ressources, "a", Dispo,"% de disponibilité")
-            Pct_ress = st.slider("Charge de travail sur ce projet (%) :",min_value= 0,max_value=Dispo, key=f"slider_ress_{Choix_projet}_{k+1}")
+            Dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == Choix_ressources)
+            Dispo_restante = next(r["Dispo_restante"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
+            st.write(Choix_ressources, "a", Dispo_restante,"% de disponibilité")
+            Pct_ress = st.slider("Charge de travail sur ce projet (%) :",min_value= 0,max_value=Dispo_base, key=f"slider_ress_{Choix_projet}_{k+1}")
             # Compter les % d'assignation pour maj
             assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
         
