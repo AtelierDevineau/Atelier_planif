@@ -142,7 +142,7 @@ with Assignation:
         if st.button("Sauvegarder"):
                # Mise à jour de la liste Ressources
             for a in assignation_en_cours:
-                for r in Ressources:
+                for r in st.session_state.Ressources:
                     if r["Nom"] == a["Nom"]:
                         r["Dispo"] = r["Dispo"] - a["Pct"]
                         
