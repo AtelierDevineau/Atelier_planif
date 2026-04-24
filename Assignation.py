@@ -17,8 +17,8 @@ def assignation_tab():
     if Choix_projet not in st.session_state.Data_proj:
       st.session_state.Data_proj[Choix_projet] = {}
         
-      Proj_courant = st.session_state.Data_proj[Choix_projet]
-      Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}")
+    Proj_courant = st.session_state.Data_proj[Choix_projet]
+    Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}")
 
     #-----------BOUCLE RESSOURCES------------------
     # Préparation des valeurs sauvegardées pour donner les index nécessaires aux widgets
@@ -53,7 +53,7 @@ def assignation_tab():
            
       # Compter les % d'assignation pour maj
       assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
-        
+      #-------------SAUVEGARDE---------------------------------  
       if st.button("Sauvegarder"):
         # Mise à jour de la liste Ressources
         for a in assignation_en_cours:
@@ -61,7 +61,7 @@ def assignation_tab():
             if r["Nom"] == a["Nom"]:
               r["Dispo_restante"] = r["Dispo_restante"] - a["Pct"]
                         
-        st.session_state.Data_proj[Choix_projet] = {
+      st.session_state.Data_proj[Choix_projet] = {
           "Nb_ressources": Nb_Ress,
           "Assignations" : assignation_en_cours}
            st.success("✅")
