@@ -21,7 +21,7 @@ def assignation_tab():
 
     #-----------BOUCLE RESSOURCES------------------
     # Préparation des valeurs sauvegardées pour donner les index nécessaires aux widgets
-    noms_ressources = [r["Nom"] for r in st.session_state.Ressources]
+    noms_ressources = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0]
     assignations_sauvegardees = Proj_courant.get("Assignations", [])
         
     for k in range(Nb_Ress):
@@ -54,15 +54,23 @@ def assignation_tab():
       assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
     #-------------SAUVEGARDE---------------------------------  
     if st.button("Sauvegarder"):
-      # Mise à jour de la liste Ressources
-      for a in assignation_en_cours:
-        for r in st.session_state.Ressources:
-          if r["Nom"] == a["Nom"]:
-            r["Dispo_restante"] = r["Dispo_restante"] - a["Pct"]
-                        
+    # On repart des dispos de base
+    for r in st.session_state.Ressources:
+        r["Dispo_restante"] = next(rb["Dispo_base"] for rb in Ressources_base if rb["Nom"] == r["Nom"])
+    
+    # On sauvegarde d'abord
     st.session_state.Data_proj[Choix_projet] = {
         "Nb_ressources": Nb_Ress,
-        "Assignations" : assignation_en_cours}
+        "Assignations": assignation_en_cours
+    }
+    
+    # Puis on recalcule en tenant compte de TOUS les projets sauvegardés
+    for proj, data in st.session_state.Data_proj.items():
+        for a in data.get("Assignations", []):
+            for r in st.session_state.Ressources:
+                if r["Nom"] == a["Nom"]:
+                    r["Dispo_restante"] -= a["Pct"]
+    
     st.success("✅")
     
   #----------------TABLEAU RECAP---------------------------------------------
