@@ -93,11 +93,11 @@ Ressources_base= [
 #Liste des Ressources qui vont bouger
 if "Ressources" not in st.session_state:
     st.session_state.Ressources= [
-    {"Nom" : "Abraham Lincoln", "Dispo" : 100},
-    { "Nom":"Albert Einstein", "Dispo" : 70},
-    {"Nom" : "Marie Curie", "Dispo" : 100},
-    {"Nom" : "Aya Nakamura", "Dispo": 100},
-    {"Nom" : "Charlie Chaplin", "Dispo" : 25}
+    {"Nom" : "Abraham Lincoln", "Dispo_restante" : 100},
+    { "Nom":"Albert Einstein", "Dispo_restante" : 70},
+    {"Nom" : "Marie Curie", "Dispo_restante" : 100},
+    {"Nom" : "Aya Nakamura", "Dispo_restante": 100},
+    {"Nom" : "Charlie Chaplin", "Dispo_restante" : 25}
     ]
 #------------------------------------------------------------------------------------------
 #Liste des Projets :
