@@ -25,7 +25,7 @@ def assignation_tab():
     Proj_courant = st.session_state.Data_proj[Choix_projet]
     Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}", on_change=marquer_modifie)
     #------------AFFICHAGE PROPRE----------------
-    lignes_col=[]
+    lignes_cols=[]
     for i in range(0, Nb_Ress, 2):
       lignes_cols.append(st.columns(min(2, Nb_Ress-i)))
 
