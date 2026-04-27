@@ -24,7 +24,12 @@ def assignation_tab():
         
     Proj_courant = st.session_state.Data_proj[Choix_projet]
     Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}", on_change=marquer_modifie)
+    #------------AFFICHAGE PROPRE----------------
+    lignes_col=[]
+    for i in range(0, Nb_Ress, 2):
+      lignes_cols.append(st.columns(min(2, Nb_Ress-i)))
 
+    
     #-----------BOUCLE RESSOURCES------------------
     # Préparation des valeurs sauvegardées pour donner les index nécessaires aux widgets (on sauvegarde les noms, le nb de ressources et leur % d'attibution)
     noms_ressources_dispo = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0]
@@ -32,6 +37,10 @@ def assignation_tab():
     deja_choisis = [] #Eviter les doublons    
     
     for k in range(Nb_Ress):
+      #-----------AFFICHAGE PROPRE----------
+      ligne = k//2
+      col = k % 2
+      
       #Pré remplissage depuis la sauvegarde    
       if k < len(assignations_sauvegardees): #Permet que si on n'a assigné que 2 personnes, il ne cherche pas 3
         nom_sauvegarde = assignations_sauvegardees[k]["Nom"]
@@ -40,32 +49,35 @@ def assignation_tab():
         #Sinon on garde les paramètres par défaut (projet non touché)
         nom_sauvegarde = None
         pct_sauvegarde = 0 
-        
-      #Exclure les ressources déjà choisies dans les lignes précédentes
-      noms_filtres = [n for n in noms_ressources_dispo if n not in deja_choisis]
       
+      #Filtrage ressources dispos sans doublons
+      noms_filtres = [n for n in noms_ressources_dispo if n not in deja_choisis]
+  
       #Calcul index par défaut
-      #Donne le nom sur lequel le multiselect va se mettre par défaut, surtout pratique si anciennes sauvegardes
       if nom_sauvegarde and nom_sauvegarde in noms_filtres:
         default_index = noms_filtres.index(nom_sauvegarde)
       else:
         default_index =0    
-    
-      #On ne pioche pas le nom de la personne dans le session state Ressources, mais bien dans la liste avec l'index qui nous intéresse pour se souvenir de ce qui a été modifié
+       
+      #Affichage dans le bloc visuel
+      with lignes_cols[ligne][col]:
+        with st.container(border=True):
+          st.markdown(f"**Personne {k+1}**")
+        #On ne pioche pas le nom de la personne dans le session state Ressources, mais bien dans la liste avec l'index qui nous intéresse pour se souvenir de ce qui a été modifié
             
-      Choix_ressources = st.selectbox(f"Personne {k+1} :", noms_filtres, index=default_index, key=f"select_ress_{Choix_projet}_{k}", on_change=marquer_modifie)   
-      deja_choisis.append(Choix_ressources)      
+        Choix_ressources = st.selectbox(f"Personne {k+1} :", noms_filtres, index=default_index, key=f"select_ress_{Choix_projet}_{k}", on_change=marquer_modifie)   
+        deja_choisis.append(Choix_ressources)      
       
-      #Calcul des dispos
-      Dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == Choix_ressources)
-      Dispo_restante = next(r["Dispo_restante"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
-      st.write(Choix_ressources, "a", Dispo_restante, "% de disponibilité")
+        #Calcul des dispos
+        Dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == Choix_ressources)
+        Dispo_restante = next(r["Dispo_restante"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
+        st.caption(f"Disponibilité restante : {Dispo_restante}%")
              
-      # Pourcentage restant, pareil on dit clairement si ça a déjà été modifié
-      Pct_ress = st.slider("Charge de travail sur ce projet (%) :", min_value=0, max_value=Dispo_base, value=pct_sauvegarde, key=f"slider_ress_{Choix_projet}_{k}",on_change=marquer_modifie)
+        # Pourcentage restant, pareil on dit clairement si ça a déjà été modifié
+        Pct_ress = st.slider("Charge de travail sur ce projet (%) :", min_value=0, max_value=Dispo_base, value=pct_sauvegarde, key=f"slider_ress_{Choix_projet}_{k}",on_change=marquer_modifie)
            
-      # Compter les % d'assignation pour maj
-      assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
+        # Compter les % d'assignation pour maj
+        assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
     #-------------SAUVEGARDE---------------------------------  
     #Affichage du statut
     if st.session_state.statut_sauvegarde == "sauvegarde":
