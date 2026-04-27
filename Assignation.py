@@ -7,9 +7,9 @@ def assignation_tab():
   st.header('Assignation des équipes')
   assignation_en_cours = []
   #Initialisation du flag de sauvegarde
-  if "statut_sauvegarde" not in session_state:
+  if "statut_sauvegarde" not in st.session_state:
     st.session_state.statut_sauvegarde = "vide" # statuts possibles : "vide" | "sauvegarde" | "modifie"
-  def marque_modifie():
+  def marquer_modifie():
     """ Modification du statut de sauvegarde"""
     st.session_state.statut_sauvegarde = "modifie"
   #------------------CHOIX DU PROJET---------------------------------------------------
@@ -47,14 +47,15 @@ def assignation_tab():
       #Calcul index par défaut
       #Donne le nom sur lequel le multiselect va se mettre par défaut, surtout pratique si anciennes sauvegardes
       if nom_sauvegarde and nom_sauvegarde in noms_filtres:
-        default_index = noms_ressources.index(nom_sauvegarde)
+        default_index = noms_filtres.index(nom_sauvegarde)
       else:
         default_index =0    
     
       #On ne pioche pas le nom de la personne dans le session state Ressources, mais bien dans la liste avec l'index qui nous intéresse pour se souvenir de ce qui a été modifié
             
-      Choix_ressources = st.selectbox(f"Personne {k+1} :", noms_ressources, index=default_index, key=f"select_ress_{Choix_projet}_{k}", on_change=marquer_modifie)   
-            
+      Choix_ressources = st.selectbox(f"Personne {k+1} :", noms_filtres, index=default_index, key=f"select_ress_{Choix_projet}_{k}", on_change=marquer_modifie)   
+      deja_choisis.append(Choix_ressources)      
+      
       #Calcul des dispos
       Dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == Choix_ressources)
       Dispo_restante = next(r["Dispo_restante"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
@@ -68,9 +69,9 @@ def assignation_tab():
     #-------------SAUVEGARDE---------------------------------  
     #Affichage du statut
     if st.session_state.statut_sauvegarde == "sauvegarde":
-      st.warning("❌ Modifications non sauvegardées")
+      st.success("✅ Sauvegardé")
     elif st.session_state.statut_sauvegarde == "modifie":
-    
+      st.warning("❌ Modifications non sauvegardées")
     if st.button("Sauvegarder"):
       # On repart des dispos de base
       for r in st.session_state.Ressources:
@@ -89,8 +90,8 @@ def assignation_tab():
             if r["Nom"] == a["Nom"]:
               r["Dispo_restante"] -= a["Pct"]
     
-    st.session_state.statut_sauvegarde = "sauvegarde"
-    st.rerun()
+      st.session_state.statut_sauvegarde = "sauvegarde"
+      st.rerun()
     
   #----------------TABLEAU RECAP---------------------------------------------
   if st.session_state.Data_proj:
