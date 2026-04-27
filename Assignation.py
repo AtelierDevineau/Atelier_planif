@@ -42,7 +42,7 @@ def assignation_tab():
         pct_sauvegarde = 0 
         
       #Exclure les ressources déjà choisies dans les lignes précédentes
-      noms_filtres = [n for n in nom_ressources_dispo if n not in deja_choisis]
+      noms_filtres = [n for n in noms_ressources_dispo if n not in deja_choisis]
       
       #Calcul index par défaut
       #Donne le nom sur lequel le multiselect va se mettre par défaut, surtout pratique si anciennes sauvegardes
