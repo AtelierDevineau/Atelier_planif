@@ -11,9 +11,9 @@ def assignation_tab():
 
   Choix_projet = st.selectbox("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet")
   
-  if Choix_projet != None:
+  if Choix_projet != None: 
     st.header(Choix_projet)
-    #Sauvegarde des données
+    #Sauvegarde des données dans le session state
     if Choix_projet not in st.session_state.Data_proj:
       st.session_state.Data_proj[Choix_projet] = {}
         
@@ -21,7 +21,7 @@ def assignation_tab():
     Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}")
 
     #-----------BOUCLE RESSOURCES------------------
-    # Préparation des valeurs sauvegardées pour donner les index nécessaires aux widgets
+    # Préparation des valeurs sauvegardées pour donner les index nécessaires aux widgets (on sauvegarde les noms, le nb de ressources et leur % d'attibution)
     noms_ressources = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0]
     assignations_sauvegardees = Proj_courant.get("Assignations", [])
         
