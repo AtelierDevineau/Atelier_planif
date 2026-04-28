@@ -105,7 +105,11 @@ def assignation_tab():
 
     proj_courant = st.session_state.Data_proj[projet]
     assignations_sauvegardees = proj_courant.get("Assignations", [])
-
+    # --- Préparation des listes ---
+    noms_disponibles = get_noms_ressources_disponibles(
+        st.session_state.Ressources, assignations_sauvegardees
+    )
+    
     nb_ress = st.number_input(
         "Personnes à affecter à ce projet :",
         value=proj_courant.get("Nb_ressources", 0),
@@ -115,10 +119,7 @@ def assignation_tab():
         on_change=marquer_modifie
     )
 
-    # --- Préparation des listes ---
-    noms_disponibles = get_noms_ressources_disponibles(
-        st.session_state.Ressources, assignations_sauvegardees
-    )
+    
 
     # --- Grille 2 colonnes ---
     lignes_cols = [st.columns(2) for i in range(0, nb_ress, 2)]
