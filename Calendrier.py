@@ -123,7 +123,7 @@ def calendrier_tab():
         choix_semaines = st.pills(
             "Fenêtre d'affichage :",
             options=list(options_semaines.keys()),
-            index=1  # 8 semaines par défaut
+            default= "8 semaines"  # 8 semaines par défaut
         )
         nb_semaines = options_semaines[choix_semaines]
 
