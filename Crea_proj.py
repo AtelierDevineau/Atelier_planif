@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import date, timedelta, datetime
 
 #-------------AFFICHAGE----------------------
-def init_statut_sauvegarde():
+def init_statut_sauvegarde_proj():
   if "statut_sauvegarde_proj" not in st.session_state:
       st.session_state.statut_sauvegarde_proj = "vide"
 
@@ -19,7 +19,7 @@ def afficher_statut():
 #-------------ONGLET-----------------------------
 
 def crea_proj_tab():
-  init_statut_sauvegarde()
+  init_statut_sauvegarde_proj()
   """Affiche l'outil de création de projet"""
   st.subheader('Création de projet')
   nom_proj = st.text_input("Entrez le nom du projet", on_change=marquer_modifie)
