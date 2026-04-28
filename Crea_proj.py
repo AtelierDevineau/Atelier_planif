@@ -15,7 +15,8 @@ def afficher_statut():
   elif st.session_state.statut_sauvegarde_proj == "modifie":
     st.warning("❌ Modifications non sauvegardées")
 
-
+if "proj" not in st.session_state:
+  st.session_state.proj = {}
 #-------------ONGLET-----------------------------
 
 def crea_proj_tab():
