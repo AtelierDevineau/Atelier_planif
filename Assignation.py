@@ -25,9 +25,6 @@ def assignation_tab():
     Proj_courant = st.session_state.Data_proj[Choix_projet]
     Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}", on_change=marquer_modifie)
     
-    #-----------PARTITION DES RESSOURCES SELON LA DISPO-------------------------
-    noms_deja_assignes = [a["Nom"] for a in assignations_sauvegardees]
-    noms_ressources_dispo = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0 or r["Nom"] in noms_deja_assignes]
     #------------AFFICHAGE PROPRE----------------
     lignes_cols=[]
     for i in range(0, Nb_Ress, 2):
@@ -39,6 +36,10 @@ def assignation_tab():
     noms_ressources_dispo = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0]
     assignations_sauvegardees = Proj_courant.get("Assignations", [])
     deja_choisis = [] #Eviter les doublons    
+     
+    #-----------PARTITION DES RESSOURCES SELON LA DISPO-------------------------
+    noms_deja_assignes = [a["Nom"] for a in assignations_sauvegardees]
+    noms_ressources_dispo = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0 or r["Nom"] in noms_deja_assignes]
     
     for k in range(Nb_Ress):
       #-----------AFFICHAGE PROPRE----------
