@@ -109,7 +109,7 @@ def calendrier_tab():
   if selection == "Projets" :
     # Affichage du calendrier projet
     fig = gantt(Projets_gantt)
-    st.plotly_chart(fig, use_caontainer_width=True)
+    st.plotly_chart(fig, use_container_width=True)
   if selection == "Absences":
     calendar(events = Absences_cal, options = Options_cal)
    
