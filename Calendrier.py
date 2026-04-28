@@ -29,7 +29,7 @@ def gantt(projets_data):
     """Construction d'un diagramme de Gantt Plotly à partir de la liste de dicos Projets_gantt"""
     fig = go.Figure()
 
-    # Le premier projet doit être en haut, on parcourt le dico dans le sens inverse
+    # Le premier projet doit être en haut, on parcourt dans le sens inverse
     for projet in reversed(projets_data):
         nom_projet = projet["projet"]
         couleur = projet["couleur"]
@@ -40,13 +40,12 @@ def gantt(projets_data):
                 date.fromisoformat(sous_tache["start"])
             ).days * 24 * 3600 * 1000  # durée en millisecondes
             base_ms = to_timestamp_ms(sous_tache["start"])
-
             fig.add_trace(go.Bar(
                 name=nom_projet,
                 orientation="h",
                 y=[label],
-                x=[duree],
-                base=[sous_tache["start"]],
+                x=[duree_ms],
+                base=[base_ms],
                 marker=dict(color=couleur, line=dict(color="white", width=1)),
                 hovertemplate=(
                     f"<b>{nom_projet}</b><br>"
@@ -58,8 +57,8 @@ def gantt(projets_data):
             ))
 
     # Calcul de la plage de dates globale pour les ticks
-    toutes_dates_debut = [st["start"] for p in projets_data for st in p["sous_taches"]]
-    toutes_dates_fin   = [st["end"]   for p in projets_data for st in p["sous_taches"]]
+    toutes_dates_debut = [s["start"] for p in projets_data for s in p["sous_taches"]]
+    toutes_dates_fin   = [s["end"]   for p in projets_data for s in p["sous_taches"]]
     date_min = min(toutes_dates_debut)
     date_max = max(toutes_dates_fin)
     ticks_dates, ticks_labels = semaines_entre(date_min, date_max)
@@ -82,19 +81,19 @@ def gantt(projets_data):
             tickangle=-90,
             showgrid=True,
             gridcolor="#eeeeee",
-            side="top",          # axe en haut
+            side="top",
         ),
         yaxis=dict(
             autorange="reversed",
             tickfont=dict(size=12),
         ),
         height=160 + sum(len(p["sous_taches"]) for p in projets_data) * 40,
-        margin=dict(l=20, r=20, t=80, b=120),  # t grand pour axe haut, b grand pour légende bas
+        margin=dict(l=20, r=20, t=80, b=120),
         plot_bgcolor="white",
         legend=dict(
             orientation="h",
             yanchor="top",
-            y=-0.15,             # sous l'axe X (qui est en bas de la zone de tracé)
+            y=-0.15,
             xanchor="center",
             x=0.5,
         ),
