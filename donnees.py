@@ -114,7 +114,7 @@ def get_couleur_projet(nom_projet):
     for p in Projets_gantt:
         if p["projet"] == nom_projet:
             return p["couleur"]
-    return"#CCCCCC" #gris si projet non trouvé
+
     
 
 
