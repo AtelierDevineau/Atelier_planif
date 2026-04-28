@@ -3,29 +3,39 @@ import streamlit as st
 
 #---------CALENDRIER---------------------------------------------------------------------------------
 #Liste des projets pour calendrier(à lier à excel)
-Projets_cal = [
+Projets_gantt = [
     {
-     "title" : "L'enlèvement au sérail",
-     "start" : "2026-01-01",
-     "end" : "2026-05-12",
-    "backgroundColor" : "#FF6C6C",
-    "borderColor":"#FF6C6C"
-     },
+        "projet": "Enlèvement au sérail",
+        "couleur": "#FF6C6C",
+        "sous_taches": [
+            {"tache": "Conception", "start": "2026-01-01", "end": "2026-02-01"},
+            {"tache": "Fabrication décors", "start": "2026-02-01", "end": "2026-03-15"},
+            {"tache": "Répétitions", "start": "2026-03-15", "end": "2026-04-20"},
+            {"tache": "Représentations", "start": "2026-04-20", "end": "2026-05-12"},
+        ]
+    },
     {
-     "title" : "Manon Lescaut",
-     "start" : "2026-02-03",
-     "end" : "2026-10-16",
-    "backgroundColor":"#FFBD45",
-    "borderColor":"#FFBD45"    
-     },
+        "projet": "Manon Lescaut",
+        "couleur": "#FFBD45",
+        "sous_taches": [
+            {"tache": "Conception", "start": "2026-02-03", "end": "2026-03-15"},
+            {"tache": "Fabrication décors", "start": "2026-03-15", "end": "2026-05-01"},
+            {"tache": "Répétitions", "start": "2026-05-01", "end": "2026-08-01"},
+            {"tache": "Représentations", "start": "2026-08-01", "end": "2026-10-16"},
+        ]
+    },
     {
-     "title" : "Brundibar",
-     "start" : "2026-03-02",
-     "end" : "2026-05-15",
-    "backgroundColor" : "#63CDEB",
-    "borderColor":"#63CDEB"
-     }
-    ]
+        "projet": "Brundibar",
+        "couleur": "#63CDEB",
+        "sous_taches": [
+            {"tache": "Conception", "start": "2026-03-02", "end": "2026-03-20"},
+            {"tache": "Fabrication décors", "start": "2026-03-20", "end": "2026-04-15"},
+            {"tache": "Répétitions", "start": "2026-04-15", "end": "2026-05-05"},
+            {"tache": "Représentations", "start": "2026-05-05", "end": "2026-05-15"},
+        ]
+    },
+]
+
 
 #Liste des absences pour calendrier (à lier à excel)
 Absences_cal = [
