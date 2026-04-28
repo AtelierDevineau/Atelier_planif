@@ -5,7 +5,7 @@ import streamlit as st
 #Liste des projets pour calendrier(à lier à excel)
 Projets_cal = [
     {
-     "title" : "Enlèvement au sérail",
+     "title" : "L'enlèvement au sérail",
      "start" : "2026-01-01",
      "end" : "2026-05-12",
     "backgroundColor" : "#FF6C6C",
