@@ -1,19 +1,20 @@
 import streamlit as st
 import plotly.graph_objects as go
 from streamlit_calendar import calendar
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from donnees import Projets_gantt, Absences_cal, Options_cal
 
+
 #-------------CREATION GANTT--------------------
+
 def to_timestamp_ms(date_str):
     """Convertit une date ISO 'YYYY-MM-DD' en timestamp milliseconds pour Plotly."""
     return int(datetime.fromisoformat(date_str).timestamp() * 1000)
-    
+
 def semaines_entre(date_debut_str, date_fin_str):
     """Génère les dates des lundis entre deux dates pour les ticks de l'axe."""
     debut = date.fromisoformat(date_debut_str)
     fin = date.fromisoformat(date_fin_str)
-    # On recule au lundi précédent
     lundi = debut - timedelta(days=debut.weekday())
     ticks_dates = []
     ticks_labels = []
@@ -100,23 +101,20 @@ def gantt(projets_data):
     )
     return fig
 
-           
+
 #-------------ONGLET CALENDRIER----------------------
 
 def calendrier_tab():
-  """Affiche onglet calendrier"""
-  st.subheader('Calendrier')
-  # Choix entre absence ou projet
-  selection = st.pills(
-  " ",
-  ["Projets","Absences"],
-  selection_mode="single",
-  default = "Projets"
-  )
-  if selection == "Projets" :
-    # Affichage du calendrier projet
-    fig = gantt(Projets_gantt)
-    st.plotly_chart(fig, use_container_width=True)
-  if selection == "Absences":
-    calendar(events = Absences_cal, options = Options_cal)
-   
+    """Affiche onglet calendrier"""
+    st.subheader('Calendrier')
+    selection = st.pills(
+        " ",
+        ["Projets", "Absences"],
+        selection_mode="single",
+        default="Projets"
+    )
+    if selection == "Projets":
+        fig = gantt(Projets_gantt)
+        st.plotly_chart(fig, use_container_width=True)
+    if selection == "Absences":
+        calendar(events=Absences_cal, options=Options_cal)
