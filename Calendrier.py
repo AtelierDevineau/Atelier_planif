@@ -42,7 +42,7 @@ def gantt(projets_data):
       type="date",
       tickformat= "%b %Y",
       tickangle = -45,
-      showgrid = True
+      showgrid = True,
       gridcolor="#eeeeee",
       ),
     yaxis= dict(
