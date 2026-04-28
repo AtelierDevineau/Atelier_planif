@@ -104,7 +104,7 @@ def get_couleur_projet(nom_projet):
     for p in Projets_cal:
         if p["title"] == nom_projet:
             return p["backgroundColor"]
-        return"#CCCCCC" #gris si projet non trouvé
+    return"#CCCCCC" #gris si projet non trouvé
     
 
 
