@@ -5,7 +5,7 @@ from datetime import date, timedelta, datetime
 from donnees import Projets_gantt, Absences_cal, Options_cal
 
 
-#-------------CREATION GANTT--------------------
+#-------------UTILITAIRES--------------------
 
 def to_timestamp_ms(date_str):
     """Convertit une date ISO 'YYYY-MM-DD' en timestamp milliseconds pour Plotly."""
@@ -26,10 +26,17 @@ def semaines_entre(date_debut_str, date_fin_str):
         lundi += timedelta(weeks=1)
     return ticks_dates, ticks_labels
 
-def gantt(projets_data):
+
+#-------------CREATION GANTT--------------------
+def gantt(projets_data,nb_semaines):
     """Construction d'un diagramme de Gantt Plotly à partir de la liste de dicos Projets_gantt"""
     fig = go.Figure()
-
+    
+    # Fenêtre de temps : aujourd'hui → aujourd'hui + nb_semaines
+    today = date.today()
+    x_min = today.isoformat()
+    x_max = (today + timedelta(weeks=nb_semaines)).isoformat()
+    
     # Le premier projet doit être en haut, on parcourt dans le sens inverse
     for projet in reversed(projets_data):
         nom_projet = projet["projet"]
@@ -114,7 +121,18 @@ def calendrier_tab():
         default="Projets"
     )
     if selection == "Projets":
-        fig = gantt(Projets_gantt)
+        # --- Menu : nombre de semaines affichées ---
+        options_semaines = {"4 semaines": 4, "8 semaines": 8, "12 semaines": 12}
+        choix_semaines = st.selectbox(
+            "Fenêtre d'affichage :",
+            options=list(options_semaines.keys()),
+            index=1  # 8 semaines par défaut
+        )
+        nb_semaines = options_semaines[choix_semaines]
+
+        # --- Affichage du Gantt ---
+        fig = gantt(Projets_gantt, nb_semaines)
         st.plotly_chart(fig, use_container_width=True)
+
     if selection == "Absences":
         calendar(events=Absences_cal, options=Options_cal)
