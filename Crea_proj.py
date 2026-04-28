@@ -31,12 +31,12 @@ def crea_proj_tab():
     date_fin =st.date_input("Fin du projet", format="YYYY/MM/DD", label_visibility="visible", width="stretch",on_change=marquer_modifie)
   
 #------------SAUVERGARDE----------------
-afficher_statut()
-if st.button("Sauvegarder"):
-  st.session_state.proj[projet] = {
-    "Nom": nom_proj,
-    "Date début": date_debut,
-    "Date fin" : date_fin
-    }
-  st.session_state.statut_sauvegarde_proj = "sauvegarde"
-  st.rerun()
+  afficher_statut()
+  if st.button("Sauvegarder"):
+    st.session_state.proj[projet] = {
+      "Nom": nom_proj,
+      "Date début": date_debut,
+      "Date fin" : date_fin
+      }
+    st.session_state.statut_sauvegarde_proj = "sauvegarde"
+    st.rerun()
