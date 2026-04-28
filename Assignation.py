@@ -50,9 +50,6 @@ def afficher_bloc_ressource(k, noms_filtres, default_index, assignations_sauvega
         max_slider = dispo_restante + charge_ce_projet
 
         st.caption(f"Disponibilité restante : {dispo_restante}%")
-        #Barre de progression
-        couleur_projet_courant = get_couleur_projet(projet)
-        afficher_barre_charge(nom_choisi, st.session_state.Data_proj, projet, couleur_projet_courant)
         
         pct_choisi = st.slider(
             "Charge :", min_value=0, max_value=max_slider,
