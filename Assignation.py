@@ -1,151 +1,171 @@
 import streamlit as st
 from donnees import Projets, Ressources_base
+from logique import (
+    recalculer_dispos,
+    get_dispo_restante,
+    get_dispo_base,
+    get_charge_sur_projet,
+    get_noms_ressources_disponibles
+)
 import pandas as pd
 
-def assignation_tab():
-  """Affiche le contenu de l'onglet Assignation des équipes"""
-  st.header('Assignation des équipes')
-  assignation_en_cours = []
-  #Initialisation du flag de sauvegarde
-  if "statut_sauvegarde" not in st.session_state:
-    st.session_state.statut_sauvegarde = "vide" # statuts possibles : "vide" | "sauvegarde" | "modifie"
-  def marquer_modifie():
-    """ Modification du statut de sauvegarde"""
+# -------------------------------------------------------
+# FONCTIONS D'AFFICHAGE
+# -------------------------------------------------------
+
+def init_statut_sauvegarde():
+    if "statut_sauvegarde" not in st.session_state:
+        st.session_state.statut_sauvegarde = "vide"
+
+def marquer_modifie():
     st.session_state.statut_sauvegarde = "modifie"
-  #------------------CHOIX DU PROJET---------------------------------------------------
 
-  Choix_projet = st.selectbox("Choisir un projet :", options=[p["Nom"] for p in Projets], key="Choix_projet",on_change=marquer_modifie)
-  
-  if Choix_projet != None: 
-    st.header(Choix_projet)
-    #Sauvegarde des données dans le session state
-    if Choix_projet not in st.session_state.Data_proj:
-      st.session_state.Data_proj[Choix_projet] = {}
-        
-    Proj_courant = st.session_state.Data_proj[Choix_projet]
-    Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}", on_change=marquer_modifie)
-    
-    #------------AFFICHAGE PROPRE----------------
-    lignes_cols=[]
-    for i in range(0, Nb_Ress, 2):
-      lignes_cols.append(st.columns(min(2, Nb_Ress-i)))
-
-    
-    #-----------BOUCLE RESSOURCES------------------
-    # Préparation des valeurs sauvegardées pour donner les index nécessaires aux widgets (on sauvegarde les noms, le nb de ressources et leur % d'attibution)
-    noms_ressources_dispo = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0]
-    assignations_sauvegardees = Proj_courant.get("Assignations", [])
-    deja_choisis = [] #Eviter les doublons    
-     
-    #-----------PARTITION DES RESSOURCES SELON LA DISPO-------------------------
-    noms_deja_assignes = [a["Nom"] for a in assignations_sauvegardees]
-    noms_ressources_dispo = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0 or r["Nom"] in noms_deja_assignes]
-    
-    for k in range(Nb_Ress):
-      #-----------AFFICHAGE PROPRE----------
-      ligne = k//2
-      col = k % 2
-      
-      #Pré remplissage depuis la sauvegarde    
-      if k < len(assignations_sauvegardees): #Permet que si on n'a assigné que 2 personnes, il ne cherche pas 3
-        nom_sauvegarde = assignations_sauvegardees[k]["Nom"]
-        pct_sauvegarde = assignations_sauvegardees[k]["Pct"] #Garde aussi le pourcentage
-      else:
-        #Sinon on garde les paramètres par défaut (projet non touché)
-        nom_sauvegarde = None
-        pct_sauvegarde = 0 
-      
-      #Filtrage ressources dispos sans doublons
-      noms_filtres = [n for n in noms_ressources_dispo if n not in deja_choisis]
-  
-      #Calcul index par défaut
-      if nom_sauvegarde and nom_sauvegarde in noms_filtres:
-        default_index = noms_filtres.index(nom_sauvegarde)
-      else:
-        default_index =0    
-     #-------AFFICHAGE----------  
-      #Affichage dans le bloc visuel
-      with lignes_cols[ligne][col]:
-        with st.container(border=True):
-          st.markdown(f"**Personne {k+1}**")
-        #On ne pioche pas le nom de la personne dans le session state Ressources, mais bien dans la liste avec l'index qui nous intéresse pour se souvenir de ce qui a été modifié
-            
-        Choix_ressources = st.selectbox(f"Personne {k+1} :", noms_filtres, index=default_index, key=f"select_ress_{Choix_projet}_{k}", on_change=marquer_modifie)   
-        deja_choisis.append(Choix_ressources)      
-      
-        #------------RECALCUL DES DISPOS---------------------
-        Dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == Choix_ressources)
-        Dispo_restante = next(r["Dispo_restante"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
-        st.caption(f"Disponibilité restante : {Dispo_restante}%")
-
-        # Dispo restante sur les AUTRES projets (hors projet courant)
-        charge_ce_projet = next(
-          (a["Pct"] for a in assignations_sauvegardees if a["Nom"] == Choix_ressources),0)
-        max_slider = Dispo_restante + charge_ce_projet
-        # Pourcentage restant, pareil on dit clairement si ça a déjà été modifié
-        Pct_ress = st.slider("Charge de travail sur ce projet (%) :", min_value=0, max_value=max_slider, value=pct_sauvegarde, key=f"slider_ress_{Choix_projet}_{k}",on_change=marquer_modifie)
-           
-        # Compter les % d'assignation pour maj
-        assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
-    #-------------SAUVEGARDE---------------------------------  
-    #Affichage du statut
+def afficher_statut():
     if st.session_state.statut_sauvegarde == "sauvegarde":
-      st.success("✅ Sauvegardé")
+        st.success("✅ Sauvegardé")
     elif st.session_state.statut_sauvegarde == "modifie":
-      st.warning("❌ Modifications non sauvegardées")
-    if st.button("Sauvegarder"):
-      # On repart des dispos de base
-      for r in st.session_state.Ressources:
-          r["Dispo_restante"] = next(rb["Dispo_base"] for rb in Ressources_base if rb["Nom"] == r["Nom"])
-    
-      # On sauvegarde d'abord
-      st.session_state.Data_proj[Choix_projet] = {
-        "Nb_ressources": Nb_Ress,
-        "Assignations": assignation_en_cours
-      }
-    
-      # Puis on recalcule en tenant compte de TOUS les projets sauvegardés
-      for proj, data in st.session_state.Data_proj.items():
-        for a in data.get("Assignations", []):
-          for r in st.session_state.Ressources:
-            if r["Nom"] == a["Nom"]:
-              r["Dispo_restante"] -= a["Pct"]
-    
-      st.session_state.statut_sauvegarde = "sauvegarde"
-      st.rerun()
-    
-  #----------------TABLEAU RECAP---------------------------------------------
-  if st.session_state.Data_proj:
+        st.warning("❌ Modifications non sauvegardées")
+
+def afficher_bloc_ressource(k, noms_filtres, default_index, assignations_sauvegardees, projet):
+    """Affiche le bloc visuel d'une ressource et retourne l'assignation choisie"""
+    pct_sauvegarde = next(
+        (a["Pct"] for i, a in enumerate(assignations_sauvegardees) if i == k), 0
+    )
+
+    with st.container(border=True):
+        st.markdown(f"**Personne {k+1}**")
+
+        nom_choisi = st.selectbox(
+            "Nom :", noms_filtres,
+            index=default_index,
+            key=f"select_ress_{projet}_{k}",
+            on_change=marquer_modifie
+        )
+
+        dispo_restante = get_dispo_restante(nom_choisi, st.session_state.Ressources)
+        charge_ce_projet = get_charge_sur_projet(nom_choisi, assignations_sauvegardees)
+        max_slider = dispo_restante + charge_ce_projet
+
+        st.caption(f"Disponibilité restante : {dispo_restante}%")
+
+        pct_choisi = st.slider(
+            "Charge :", min_value=0, max_value=max_slider,
+            value=pct_sauvegarde,
+            key=f"slider_ress_{projet}_{k}",
+            on_change=marquer_modifie
+        )
+
+    return {"Nom": nom_choisi, "Pct": pct_choisi}
+
+def afficher_tableau_recap():
+    """Affiche le tableau récapitulatif de toutes les assignations"""
     st.divider()
     st.subheader("Récapitulatif")
-    st.dataframe(
-      {"Projet": list(st.session_state.Data_proj.keys()),
-      "Ressources": [v.get("Nb_ressources", 0) for v in st.session_state.Data_proj.values()]}
-        )
-    #Détail par ressource
-    lignes = []
-    for nom_proj, data in st.session_state.Data_proj.items():
-      for a in data.get("Assignations",[]):
-        lignes.append({
-          "Ressource" : a["Nom"],
-          "Projet" : nom_proj,
-          "Charge (%)" : a["Pct"],
-        })
+    st.dataframe({
+        "Projet": list(st.session_state.Data_proj.keys()),
+        "Ressources": [v.get("Nb_ressources", 0) for v in st.session_state.Data_proj.values()]
+    })
+
+    lignes = [
+        {"Ressource": a["Nom"], "Projet": nom_proj, "Charge (%)": a["Pct"]}
+        for nom_proj, data in st.session_state.Data_proj.items()
+        for a in data.get("Assignations", [])
+    ]
     if lignes:
-      df= pd.DataFrame(lignes)
-      #Pivot lignes/colonnes
-      df_pivot = df.pivot_table(
-            index="Ressource",
-            columns="Projet",
-            values="Charge (%)",
-            aggfunc="sum"
-        ).fillna(0).astype(int)
-    
-      st.dataframe(df_pivot, use_container_width=True)
-    
+        df_pivot = (
+            pd.DataFrame(lignes)
+            .pivot_table(index="Ressource", columns="Projet", values="Charge (%)", aggfunc="sum")
+            .fillna(0).astype(int)
+        )
+        st.dataframe(df_pivot, use_container_width=True)
 
+# -------------------------------------------------------
+# ONGLET PRINCIPAL
+# -------------------------------------------------------
 
+def assignation_tab():
+    st.header('Assignation des équipes')
+    init_statut_sauvegarde()
 
+    # --- Choix du projet ---
+    projet = st.selectbox(
+        "Choisir un projet :",
+        options=[p["Nom"] for p in Projets],
+        key="choix_projet",
+        on_change=marquer_modifie
+    )
 
+    if projet is None:
+        return
 
+    st.header(projet)
 
+    if projet not in st.session_state.Data_proj:
+        st.session_state.Data_proj[projet] = {}
+
+    proj_courant = st.session_state.Data_proj[projet]
+    assignations_sauvegardees = proj_courant.get("Assignations", [])
+
+    nb_ress = st.number_input(
+        "Personnes à affecter à ce projet :",
+        value=proj_courant.get("Nb_ressources", 0),
+        key=f"nb_ress_{projet}",
+        on_change=marquer_modifie
+    )
+
+    # --- Préparation des listes ---
+    noms_disponibles = get_noms_ressources_disponibles(
+        st.session_state.Ressources, assignations_sauvegardees
+    )
+
+    # --- Grille 2 colonnes ---
+    lignes_cols = [
+        st.columns(min(2, nb_ress - i))
+        for i in range(0, nb_ress, 2)
+    ]
+
+    # --- Boucle ressources ---
+    assignation_en_cours = []
+    deja_choisis = []
+
+    for k in range(nb_ress):
+        # Pré-remplissage depuis la sauvegarde
+        if k < len(assignations_sauvegardees):
+            nom_sauvegarde = assignations_sauvegardees[k]["Nom"]
+        else:
+            nom_sauvegarde = None
+
+        # Filtrage sans doublons
+        noms_filtres = [n for n in noms_disponibles if n not in deja_choisis]
+
+        # Index par défaut
+        default_index = noms_filtres.index(nom_sauvegarde) if nom_sauvegarde in noms_filtres else 0
+
+        # Affichage dans la grille
+        with lignes_cols[k // 2][k % 2]:
+            assignation = afficher_bloc_ressource(
+                k, noms_filtres, default_index, assignations_sauvegardees, projet
+            )
+
+        deja_choisis.append(assignation["Nom"])
+        assignation_en_cours.append(assignation)
+
+    # --- Sauvegarde ---
+    afficher_statut()
+
+    if st.button("Sauvegarder"):
+        st.session_state.Data_proj[projet] = {
+            "Nb_ressources": nb_ress,
+            "Assignations": assignation_en_cours
+        }
+        recalculer_dispos(
+            st.session_state.Data_proj,
+            st.session_state.Ressources,
+            Ressources_base
+        )
+        st.session_state.statut_sauvegarde = "sauvegarde"
+        st.rerun()
+
+    # --- Tableau récap ---
+    if st.session_state.Data_proj:
+        afficher_tableau_recap()
