@@ -1,6 +1,6 @@
 import streamlit as st
 from donnees import Projets, Ressources_base
-from logique import (
+from Logique import (
     recalculer_dispos,
     get_dispo_restante,
     get_dispo_base,
