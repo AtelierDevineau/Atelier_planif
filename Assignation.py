@@ -142,7 +142,7 @@ def assignation_tab():
     if projet is None:
         return
 
-    st.header(projet)
+    st.markdown(f"<h2 style='text-align:center; font-weight:bold;'>{projet}</h2>", unsafe_allow_html=True) #On passe par le html pour que ce soit assez grand
 
     if projet not in st.session_state.Data_proj:
         st.session_state.Data_proj[projet] = {}
