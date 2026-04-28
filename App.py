@@ -15,12 +15,14 @@ with col2:
 # ── Titre centré et en gras ─────────────────────────────────────────────────────────────────────
 st.markdown("<h1 style='text-align:center; font-weight:bold;'>Planification projets</h1>", unsafe_allow_html=True)
 # ── Onglets ───────────────────────────────────────────────────────────────────
-Calendrier, Assignation, Crea_proj = st.tabs(["Calendrier", "Assignation équipe","Création projet"])
+Calendrier,Crea_proj, Assignation = st.tabs(["Calendrier", "Création projet","Assignation équipe"])
 
 with Calendrier:
     calendrier_tab()
+
 with Crea_proj:
     crea_proj_tab()
+
 with Assignation:
     assignation_tab()
 
