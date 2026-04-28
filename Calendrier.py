@@ -5,7 +5,7 @@ from datetime import date, timedelta, datetime
 from donnees import Projets_gantt, Absences_cal, Options_cal
 
 
-#-------------UTILITAIRES--------------------
+#-------------CREATION GANTT--------------------
 
 def to_timestamp_ms(date_str):
     """Convertit une date ISO 'YYYY-MM-DD' en timestamp milliseconds pour Plotly."""
@@ -26,81 +26,45 @@ def semaines_entre(date_debut_str, date_fin_str):
         lundi += timedelta(weeks=1)
     return ticks_dates, ticks_labels
 
-
-#-------------CREATION GANTT--------------------
-
-def gantt(projets_data, nb_semaines, projets_deplies):
-    """
-    Construit le Gantt Plotly.
-    - projets_deplies : set des noms de projets dont on affiche les sous-tâches
-    - Pour les autres, on affiche une barre globale (début première tâche → fin dernière tâche)
-    """
+def gantt(projets_data):
+    """Construction d'un diagramme de Gantt Plotly à partir de la liste de dicos Projets_gantt"""
     fig = go.Figure()
 
-    # Fenêtre de temps : aujourd'hui → aujourd'hui + nb_semaines
-    today = date.today()
-    x_min = today.isoformat()
-    x_max = (today + timedelta(weeks=nb_semaines)).isoformat()
-
-    # On parcourt en sens inverse pour que le 1er projet soit en haut
+    # Le premier projet doit être en haut, on parcourt dans le sens inverse
     for projet in reversed(projets_data):
         nom_projet = projet["projet"]
         couleur = projet["couleur"]
-        deplie = nom_projet in projets_deplies
-
-        if deplie:
-            # --- Mode déroulé : une barre par sous-tâche ---
-            for sous_tache in projet["sous_taches"]:
-                label = f"  ↳ {sous_tache['tache']}"
-                duree_ms = (
-                    date.fromisoformat(sous_tache["end"]) -
-                    date.fromisoformat(sous_tache["start"])
-                ).days * 24 * 3600 * 1000
-                base_ms = to_timestamp_ms(sous_tache["start"])
-                fig.add_trace(go.Bar(
-                    name=nom_projet,
-                    orientation="h",
-                    y=[label],
-                    x=[duree_ms],
-                    base=[base_ms],
-                    marker=dict(color=couleur, opacity=0.75,
-                                line=dict(color="white", width=1)),
-                    hovertemplate=(
-                        f"<b>{nom_projet}</b><br>"
-                        f"Tâche : {sous_tache['tache']}<br>"
-                        f"Début : {sous_tache['start']}<br>"
-                        f"Fin : {sous_tache['end']}<extra></extra>"
-                    ),
-                    showlegend=False,
-                ))
-        else:
-            # --- Mode replié : une seule barre couvrant tout le projet ---
-            debut_projet = min(s["start"] for s in projet["sous_taches"])
-            fin_projet   = max(s["end"]   for s in projet["sous_taches"])
+        for sous_tache in projet["sous_taches"]:
+            label = f"{nom_projet} - {sous_tache['tache']}"
             duree_ms = (
-                date.fromisoformat(fin_projet) -
-                date.fromisoformat(debut_projet)
-            ).days * 24 * 3600 * 1000
-            base_ms = to_timestamp_ms(debut_projet)
+                date.fromisoformat(sous_tache["end"]) -
+                date.fromisoformat(sous_tache["start"])
+            ).days * 24 * 3600 * 1000  # durée en millisecondes
+            base_ms = to_timestamp_ms(sous_tache["start"])
             fig.add_trace(go.Bar(
                 name=nom_projet,
                 orientation="h",
-                y=[nom_projet],
+                y=[label],
                 x=[duree_ms],
                 base=[base_ms],
                 marker=dict(color=couleur, line=dict(color="white", width=1)),
                 hovertemplate=(
                     f"<b>{nom_projet}</b><br>"
-                    f"Début : {debut_projet}<br>"
-                    f"Fin : {fin_projet}<extra></extra>"
+                    f"Tâche : {sous_tache['tache']}<br>"
+                    f"Début : {sous_tache['start']}<br>"
+                    f"Fin : {sous_tache['end']}<extra></extra>"
                 ),
                 showlegend=False,
             ))
 
-    # Ticks de l'axe X sur la fenêtre visible
-    ticks_dates, ticks_labels = semaines_entre(x_min, x_max)
+    # Calcul de la plage de dates globale pour les ticks
+    toutes_dates_debut = [s["start"] for p in projets_data for s in p["sous_taches"]]
+    toutes_dates_fin   = [s["end"]   for p in projets_data for s in p["sous_taches"]]
+    date_min = min(toutes_dates_debut)
+    date_max = max(toutes_dates_fin)
+    ticks_dates, ticks_labels = semaines_entre(date_min, date_max)
 
-    # Légende manuelle
+    # Légende manuelle (un carré coloré par projet)
     for projet in projets_data:
         fig.add_trace(go.Scatter(
             x=[None], y=[None],
@@ -109,17 +73,10 @@ def gantt(projets_data, nb_semaines, projets_deplies):
             name=projet["projet"],
         ))
 
-    # Hauteur dynamique selon le nombre de lignes affichées
-    nb_lignes = sum(
-        len(p["sous_taches"]) if p["projet"] in projets_deplies else 1
-        for p in projets_data
-    )
-
     fig.update_layout(
         barmode="overlay",
         xaxis=dict(
             type="date",
-            range=[x_min, x_max],
             tickvals=ticks_dates,
             ticktext=ticks_labels,
             tickangle=-90,
@@ -131,7 +88,7 @@ def gantt(projets_data, nb_semaines, projets_deplies):
             autorange="reversed",
             tickfont=dict(size=12),
         ),
-        height=160 + nb_lignes * 40,
+        height=160 + sum(len(p["sous_taches"]) for p in projets_data) * 40,
         margin=dict(l=20, r=20, t=80, b=120),
         plot_bgcolor="white",
         legend=dict(
@@ -150,46 +107,14 @@ def gantt(projets_data, nb_semaines, projets_deplies):
 def calendrier_tab():
     """Affiche onglet calendrier"""
     st.subheader('Calendrier')
-
     selection = st.pills(
         " ",
         ["Projets", "Absences"],
         selection_mode="single",
         default="Projets"
     )
-
     if selection == "Projets":
-
-        # --- Initialisation session state ---
-        if "projets_deplies" not in st.session_state:
-            st.session_state.projets_deplies = set()
-
-        # --- Menu : nombre de semaines affichées ---
-        options_semaines = {"4 semaines": 4, "8 semaines": 8, "12 semaines": 12}
-        choix_semaines = st.selectbox(
-            "Fenêtre d'affichage :",
-            options=list(options_semaines.keys()),
-            index=1  # 8 semaines par défaut
-        )
-        nb_semaines = options_semaines[choix_semaines]
-
-        # --- Boutons de déroulement (un par projet) ---
-        st.write("**Projets :**")
-        cols = st.columns(len(Projets_gantt))
-        for i, projet in enumerate(Projets_gantt):
-            nom = projet["projet"]
-            deplie = nom in st.session_state.projets_deplies
-            label_btn = f"▼ {nom}" if deplie else f"▶ {nom}"
-            if cols[i].button(label_btn, key=f"btn_{nom}"):
-                if deplie:
-                    st.session_state.projets_deplies.discard(nom)
-                else:
-                    st.session_state.projets_deplies.add(nom)
-                st.rerun()
-
-        # --- Affichage du Gantt ---
-        fig = gantt(Projets_gantt, nb_semaines, st.session_state.projets_deplies)
+        fig = gantt(Projets_gantt)
         st.plotly_chart(fig, use_container_width=True)
-
     if selection == "Absences":
         calendar(events=Absences_cal, options=Options_cal)
