@@ -71,7 +71,7 @@ def gantt(projets_data):
             type="date",
             tickvals=ticks_dates,
             ticktext=ticks_labels,
-            tickangle=-45,
+            tickangle=-90,
             showgrid=True,
             gridcolor="#eeeeee",
             side="top",          # axe en haut
