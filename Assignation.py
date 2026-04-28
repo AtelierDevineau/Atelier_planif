@@ -128,7 +128,7 @@ def afficher_tableau_recap():
 # -------------------------------------------------------
 
 def assignation_tab():
-    st.header('Assignation des équipes')
+    st.subheader('Assignation des équipes')
     init_statut_sauvegarde()
 
     # --- Choix du projet ---
