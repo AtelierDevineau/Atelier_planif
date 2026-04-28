@@ -120,9 +120,10 @@ def calendrier_tab():
     if selection == "Projets":
         # --- Menu : nombre de semaines affichées ---
         options_semaines = {"4 semaines": 4, "8 semaines": 8, "12 semaines": 12}
-        choix_semaines = st.pills(
+        choix_semaines = st.segmented_control(
             "Fenêtre d'affichage :",
             options=list(options_semaines.keys()),
+            selection_mode="single",
             default= "8 semaines"  # 8 semaines par défaut
         )
         nb_semaines = options_semaines[choix_semaines]
