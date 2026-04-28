@@ -16,7 +16,7 @@ def gantt(projets_data):
       fig.add_trace(go.Bar(
         name = nom_projet,
         orientation = "h",
-        y=[label]
+        y=[label],
         x=[(__import__("datetime").date.fromisoformat(sous_tache["end"]) -
                     __import__("datetime").date.fromisoformat(sous_tache["start"])).days],
          base=[sous_tache["start"]],
