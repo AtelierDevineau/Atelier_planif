@@ -2,6 +2,7 @@ import streamlit as st
 from donnees import init_session_state
 from Calendrier import calendrier_tab
 from Assignation import assignation_tab
+from Crea_proj import crea_proj_tab
 
 # ── Init ──────────────────────────────────────────────────────────────────────
 init_session_state()
@@ -21,3 +22,6 @@ with Calendrier:
 
 with Assignation:
     assignation_tab()
+
+with Crea_proj:
+    crea_proj_tab()
