@@ -50,8 +50,8 @@ def get_segments_charge(nom, data_proj, projet_courant):
     total_assigne = 0
 
     for nom_proj, data in data_proj.items():
-        if nom_proj == projet_courant:
-            continue  # on n'affiche pas le projet courant dans la barre
+        if projet_courant and nom_proj == projet_courant:
+            continue  #on ignore le projet courant s'il n'est pas défini
         for a in data.get("Assignations", []):
             if a["Nom"] == nom:
                 segments.append({
