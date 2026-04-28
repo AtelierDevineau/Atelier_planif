@@ -19,6 +19,7 @@ def afficher_statut():
 #-------------ONGLET-----------------------------
 
 def crea_proj_tab():
+  init_statut_sauvegarde()
   """Affiche l'outil de création de projet"""
   st.subheader('Création de projet')
   nom_proj = st.text_input("Entrez le nom du projet", on_change=marquer_modifie)
