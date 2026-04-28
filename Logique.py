@@ -36,3 +36,39 @@ def get_noms_ressources_disponibles(ressources, assignations_sauvegardees):
         r["Nom"] for r in ressources
         if r["Dispo_restante"] > 0 or r["Nom"] in noms_deja_assignes
     ]
+
+#-------------FONCTION POUR SOTCKAGE DES DONNEES DE LA BARRE DE DISPO VISUELLE--------------
+def get_segments_charge(nom, data_proj, projet_courant):
+    """
+    Retourne la liste des segments colorés pour la barre de charge d'une ressource.
+    Chaque segment = {"projet": nom, "pct": valeur, "couleur": hex}
+    Le dernier segment = dispo restante en gris clair.
+    """
+    from donnees import get_couleur_projet, Ressources_base
+
+    segments = []
+    total_assigne = 0
+
+    for nom_proj, data in data_proj.items():
+        if nom_proj == projet_courant:
+            continue  # on n'affiche pas le projet courant dans la barre
+        for a in data.get("Assignations", []):
+            if a["Nom"] == nom:
+                segments.append({
+                    "projet": nom_proj,
+                    "pct": a["Pct"],
+                    "couleur": get_couleur_projet(nom_proj)
+                })
+                total_assigne += a["Pct"]
+
+    dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == nom)
+    dispo_restante = dispo_base - total_assigne
+
+    if dispo_restante > 0:
+        segments.append({
+            "projet": "Disponible",
+            "pct": dispo_restante,
+            "couleur": "#E0E0E0"
+        })
+
+    return segments
