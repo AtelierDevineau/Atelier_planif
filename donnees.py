@@ -111,9 +111,9 @@ def init_session_state():
 #------RECUPERER COULEUR PORJ--------------------------------------------------
 def get_couleur_projet(nom_projet):
     """Retourne la couleur hex d'un projet, gris par défaut"""
-    for p in Projets_cal:
-        if p["title"] == nom_projet:
-            return p["backgroundColor"]
+    for p in Projets_gantt:
+        if p["projet"] == nom_projet:
+            return p["couleur"]
     return"#CCCCCC" #gris si projet non trouvé
     
 
