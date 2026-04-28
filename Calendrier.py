@@ -80,6 +80,7 @@ def gantt(projets_data,nb_semaines):
         barmode="overlay",
         xaxis=dict(
             type="date",
+            range=[x_min, x_max],
             tickvals=ticks_dates,
             ticktext=ticks_labels,
             tickangle=-90,
