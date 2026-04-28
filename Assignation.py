@@ -109,6 +109,8 @@ def assignation_tab():
     nb_ress = st.number_input(
         "Personnes à affecter à ce projet :",
         value=proj_courant.get("Nb_ressources", 0),
+        min_value=0,
+        max_value = len(noms_disponibles),
         key=f"nb_ress_{projet}",
         on_change=marquer_modifie
     )
@@ -119,10 +121,7 @@ def assignation_tab():
     )
 
     # --- Grille 2 colonnes ---
-    lignes_cols = [
-        st.columns(min(2, nb_ress - i))
-        for i in range(0, nb_ress, 2)
-    ]
+    lignes_cols = [st.columns(2) for i in range(0, nb_ress, 2)]
 
     # --- Boucle ressources ---
     assignation_en_cours = []
