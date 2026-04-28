@@ -5,6 +5,10 @@ from datetime import date, timedelta
 from donnees import Projets_gantt, Absences_cal, Options_cal
 
 #-------------CREATION GANTT--------------------
+def to_timestamp_ms(date_str):
+    """Convertit une date ISO 'YYYY-MM-DD' en timestamp milliseconds pour Plotly."""
+    return int(datetime.fromisoformat(date_str).timestamp() * 1000)
+    
 def semaines_entre(date_debut_str, date_fin_str):
     """Génère les dates des lundis entre deux dates pour les ticks de l'axe."""
     debut = date.fromisoformat(date_debut_str)
@@ -31,8 +35,12 @@ def gantt(projets_data):
         couleur = projet["couleur"]
         for sous_tache in projet["sous_taches"]:
             label = f"{nom_projet} - {sous_tache['tache']}"
-            duree = (date.fromisoformat(sous_tache["end"]) -
-                     date.fromisoformat(sous_tache["start"])).days
+            duree_ms = (
+                date.fromisoformat(sous_tache["end"]) -
+                date.fromisoformat(sous_tache["start"])
+            ).days * 24 * 3600 * 1000  # durée en millisecondes
+            base_ms = to_timestamp_ms(sous_tache["start"])
+
             fig.add_trace(go.Bar(
                 name=nom_projet,
                 orientation="h",
