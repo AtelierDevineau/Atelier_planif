@@ -11,24 +11,8 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.image("Atelier Devineau logo.png", use_container_width=True)
 
-# ── Titre ─────────────────────────────────────────────────────────────────────
-
-# Charger la police depuis Google Fonts
-st.markdown(
-    """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@700&display=swap');
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Titre avec la police
-st.markdown(
-    "<h1 style='text-align:center; font-weight:bold; font-family: Stardos Stencil, serif;'>Planification projets</h1>",
-    unsafe_allow_html=True
-)
-
+# ── Titre centré et en gras ─────────────────────────────────────────────────────────────────────
+st.markdown("<h1 style='text-align:center; font-weight:bold;'>Planification projets</h1>", unsafe_allow_html=True)
 # ── Onglets ───────────────────────────────────────────────────────────────────
 Calendrier, Assignation = st.tabs(["Calendrier", "Assignation équipe"])
 
