@@ -64,12 +64,8 @@ def gantt(projets_data,nb_semaines):
                 showlegend=False,
             ))
 
-    # Calcul de la plage de dates globale pour les ticks
-    toutes_dates_debut = [s["start"] for p in projets_data for s in p["sous_taches"]]
-    toutes_dates_fin   = [s["end"]   for p in projets_data for s in p["sous_taches"]]
-    date_min = min(toutes_dates_debut)
-    date_max = max(toutes_dates_fin)
-    ticks_dates, ticks_labels = semaines_entre(date_min, date_max)
+    # Ticks de l'axe X sur la fenêtre visible
+    ticks_dates, ticks_labels = semaines_entre(x_min, x_max)
 
     # Légende manuelle (un carré coloré par projet)
     for projet in projets_data:
