@@ -10,10 +10,10 @@ def marquer_modifie():
   st.session_state.statut_sauvegarde_proj = "modifie"
 
 def afficher_statut():
-    if st.session_state.statut_sauvegarde == "sauvegarde":
-        st.success("✅ Sauvegardé")
-    elif st.session_state.statut_sauvegarde == "modifie":
-        st.warning("❌ Modifications non sauvegardées")
+  if st.session_state.statut_sauvegarde_proj == "sauvegarde":
+    st.success("✅ Sauvegardé")
+  elif st.session_state.statut_sauvegarde_proj == "modifie":
+    st.warning("❌ Modifications non sauvegardées")
 
 
 #-------------ONGLET-----------------------------
