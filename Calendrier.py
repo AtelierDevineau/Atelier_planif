@@ -34,7 +34,7 @@ def gantt(projets_data):
           x=[None],y=[None],
           mode="markers",
           marker=dict(size=10, color=projet["couleur"], symbol="square"),
-          name =projet["projer"],
+          name =projet["projet"],
         ))
   fig.update_layout(
     barmode = "overlay",
