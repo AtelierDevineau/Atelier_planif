@@ -47,7 +47,7 @@ def gantt(projets_data):
       ),
     yaxis= dict(
       autorange="reversed",
-      tickfront= dict(size=12),
+      tickfont= dict(size=12),
     ),
     height = 120 + sum(len(p["sous_taches"]) for p in projets_data) * 40,
     margin = dict(l=20, r=20, t=40, b=40),
