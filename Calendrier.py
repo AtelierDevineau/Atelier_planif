@@ -4,7 +4,7 @@ from donnees import Projets_cal, Absences_cal, Options_cal
 
 def calendrier_tab():
   """Affiche onglet calendrier"""
-  st.header('Calendrier')
+  st.subheader('Calendrier')
   # Choix entre absence ou projet
   selection = st.pills(
   " ",
