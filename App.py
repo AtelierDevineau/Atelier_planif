@@ -19,9 +19,9 @@ Calendrier, Assignation, Crea_proj = st.tabs(["Calendrier", "Assignation équipe
 
 with Calendrier:
     calendrier_tab()
-
+with Crea_proj:
+    crea_proj_tab()
 with Assignation:
     assignation_tab()
 
-with Crea_proj:
-    crea_proj_tab()
+
