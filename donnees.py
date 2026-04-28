@@ -96,3 +96,18 @@ def init_session_state():
   #Données projets
   if "Data_proj" not in st.session_state:
       st.session_state.Data_proj = {}
+
+
+#------RECUPERER COULEUR PORJ--------------------------------------------------
+def get_couleur_projet(nom_projet):
+    """Retourne la couleur hex d'un projet, gris par défaut"""
+    for p in pPorjets_cal:
+        if p["title"] == nom_projet:
+            return p["backgroundColor"]
+        return"#CCCCCC" #gris si projet non trouvé
+    
+
+
+
+
+
