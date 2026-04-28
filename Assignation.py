@@ -24,6 +24,10 @@ def assignation_tab():
         
     Proj_courant = st.session_state.Data_proj[Choix_projet]
     Nb_Ress = st.number_input("Personnes à affecter à ce projet :", value = Proj_courant.get("Nb_ressources", 0), key=f"nb_ress_{Choix_projet}", on_change=marquer_modifie)
+    
+    #-----------PARTITION DES RESSOURCES SELON LA DISPO-------------------------
+    noms_deja_assignes = [a["Nom"] for a in assignations_sauvegardees]
+    noms_ressources_dispo = [r["Nom"] for r in st.session_state.Ressources if r["Dispo_restante"] > 0 or r["Nom"] in noms_deja_assignes]
     #------------AFFICHAGE PROPRE----------------
     lignes_cols=[]
     for i in range(0, Nb_Ress, 2):
@@ -58,7 +62,7 @@ def assignation_tab():
         default_index = noms_filtres.index(nom_sauvegarde)
       else:
         default_index =0    
-       
+     #-------AFFICHAGE----------  
       #Affichage dans le bloc visuel
       with lignes_cols[ligne][col]:
         with st.container(border=True):
@@ -68,13 +72,17 @@ def assignation_tab():
         Choix_ressources = st.selectbox(f"Personne {k+1} :", noms_filtres, index=default_index, key=f"select_ress_{Choix_projet}_{k}", on_change=marquer_modifie)   
         deja_choisis.append(Choix_ressources)      
       
-        #Calcul des dispos
+        #------------RECALCUL DES DISPOS---------------------
         Dispo_base = next(r["Dispo_base"] for r in Ressources_base if r["Nom"] == Choix_ressources)
         Dispo_restante = next(r["Dispo_restante"] for r in st.session_state.Ressources if r["Nom"] == Choix_ressources)
         st.caption(f"Disponibilité restante : {Dispo_restante}%")
-             
+
+        # Dispo restante sur les AUTRES projets (hors projet courant)
+        charge_ce_projet = next(
+          (a["Pct"] for a in assignations_sauvegardees if a["Nom"] == Choix_ressources),0)
+        max_slider = Dispo_restante + charge_ce_projet
         # Pourcentage restant, pareil on dit clairement si ça a déjà été modifié
-        Pct_ress = st.slider("Charge de travail sur ce projet (%) :", min_value=0, max_value=Dispo_base, value=pct_sauvegarde, key=f"slider_ress_{Choix_projet}_{k}",on_change=marquer_modifie)
+        Pct_ress = st.slider("Charge de travail sur ce projet (%) :", min_value=0, max_value=max_slider, value=pct_sauvegarde, key=f"slider_ress_{Choix_projet}_{k}",on_change=marquer_modifie)
            
         # Compter les % d'assignation pour maj
         assignation_en_cours.append({"Nom": Choix_ressources, "Pct" : Pct_ress})
