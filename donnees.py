@@ -93,20 +93,21 @@ Projets = [
 #-------INITIALISATION SESSION STATE-----------------------------------------------------------------------------------
 
 def init_session_state():
-  """Initialise les variables de session si elles n'existent pas encore"""
-  #Données ressources
-  if "Ressources" not in st.session_state:
-      st.session_state.Ressources= [
-      {"Nom" : "Abraham Lincoln", "Dispo_restante" : 100},
-      { "Nom":"Albert Einstein", "Dispo_restante" : 70},
-      {"Nom" : "Marie Curie", "Dispo_restante" : 100},
-      {"Nom" : "Aya Nakamura", "Dispo_restante": 100},
-      {"Nom" : "Charlie Chaplin", "Dispo_restante" : 25}
-      ]
-  #Données projets
-  if "Data_proj" not in st.session_state:
-      st.session_state.Data_proj = {}
-
+    """Initialise les variables de session si elles n'existent pas encore"""
+    #Données ressources
+    if "Ressources" not in st.session_state:
+        st.session_state.Ressources= [
+        {"Nom" : "Abraham Lincoln", "Dispo_restante" : 100},
+        { "Nom":"Albert Einstein", "Dispo_restante" : 70},
+        {"Nom" : "Marie Curie", "Dispo_restante" : 100},
+        {"Nom" : "Aya Nakamura", "Dispo_restante": 100},
+        {"Nom" : "Charlie Chaplin", "Dispo_restante" : 25}
+        ]
+    #Données projets
+    if "Data_proj" not in st.session_state:
+        st.session_state.Data_proj = {}
+    if "proj" not in st.session_state:
+          st.session_state.proj = {}
 
 #------RECUPERER COULEUR PORJ--------------------------------------------------
 def get_couleur_projet(nom_projet):
