@@ -23,11 +23,11 @@ def crea_proj_tab():
 
     for i, projet in enumerate(projets):
       couleur = projet["couleur"]
-      with st.expander(f"**{projet['projet']}** - {len(projet['sous-taches'])} sous-tache(s)"):
+      with st.expander(f"**{projet['projet']}** - {len(projet['sous_taches'])} sous-tache(s)"):
         #---------------EDITION DU PROJET---------------
         new_proj = st.text_input("Nom du projet",
           value = projet["projet"],
-          key = f{"nom_{i}"
+          key = f"nom_{i}"
                   )
         #Sélecteur de couleur
         noms_couleurs = list(COULEURS_PALETTE.keys())
@@ -35,7 +35,7 @@ def crea_proj_tab():
         index_couleur = couleurs_hex.index(couleur) if couleur in couleurs_hex else 0
         choix_couleur = st.selectbox(
           "Couleur",
-          options=noms_couleur,
+          options=noms_couleurs,
           key=f"couleur_{i}",
           format_func = lambda nom: f"{nom} ({COULEURS_PALETTE[nom]})"
         )
@@ -78,7 +78,7 @@ def crea_proj_tab():
           sous_taches.append({
             "tache" : "Nouvelle tâche",
             "start" : last_end.isoformat(),
-            "end" (last_end + timedelta(weeks=2)).isoformat,
+            "end" (last_end + timedelta(weeks=2)).isoformat(),
           })
           st.rerun()
         #--------------BOUTONS--------------------------
@@ -88,7 +88,7 @@ def crea_proj_tab():
             projets[i]["projet"] = new_proj
             projets[i]["couleur"] = new_color
             projets[i]["sous-taches"] = sous_taches
-            st.success(f"Projet "{nouveau_nom}" mis à jour.")
+            st.success(f"Projet « {new_proj} » mis à jour.")
             st.rerun()
         with col_del:
           if st.button("🗑 Supprimer ce projet", key=f"suppr_{i}", type="secondary"):
@@ -100,30 +100,30 @@ def crea_proj_tab():
       st.info("Aucun projet. Créez-en un ci-dessous.")
 
 
-#-----------------CREATION NOUVEAU PROJET----------------------
-st.divider()
-st.subheader("Nouveau projet")
-
-with st.form("form_nouveau_projet", clear_on_submit = True):
-  nom_new = st.text_input("Nom du projet")
-  choix_couleur_new = st.selectbox("Couleur", options = list(COULEURS_PALETTE.keys()), format_func = lambda nom: f"{nom} ({COULEURS_PALETTE[nom]})")
-  
-  submitted = st.form_submit_button("Créer le projet")
-
-if submitted:
-  if not nom_new.strip(): #Au cas où aucun nom est rentré
-    st.error("Merci de saisir le nom du projet")
-  elif any(p["projet"] == nom_new.strip() for p in projets): #Si le projet existe déjà
-    st.error("Un projet avec ce nom existe déjà")
-  else:
-    projets.append({
-      "projet" : nom_new.strip(),
-      "couleur" : COULEURS_PALETTE[choix_couleur_new],
-      "sous_taches":[]
-    })
-    st.success(f"Projet {nom_new.strip()} créé ! Dépliez le ci-dessus pour ajouter des sous-tâches.")
-    st.rerun()
-  
+    #-----------------CREATION NOUVEAU PROJET----------------------
+    st.divider()
+    st.subheader("Nouveau projet")
+    
+    with st.form("form_nouveau_projet", clear_on_submit = True):
+      nom_new = st.text_input("Nom du projet")
+      choix_couleur_new = st.selectbox("Couleur", options = list(COULEURS_PALETTE.keys()), format_func = lambda nom: f"{nom} ({COULEURS_PALETTE[nom]})")
+      
+      submitted = st.form_submit_button("Créer le projet")
+    
+    if submitted:
+      if not nom_new.strip(): #Au cas où aucun nom est rentré
+        st.error("Merci de saisir le nom du projet")
+      elif any(p["projet"] == nom_new.strip() for p in projets): #Si le projet existe déjà
+        st.error("Un projet avec ce nom existe déjà")
+      else:
+        projets.append({
+          "projet" : nom_new.strip(),
+          "couleur" : COULEURS_PALETTE[choix_couleur_new],
+          "sous_taches":[]
+        })
+        st.success(f"Projet {nom_new.strip()} créé ! Dépliez le ci-dessus pour ajouter des sous-tâches.")
+        st.rerun()
+      
 
 
 
