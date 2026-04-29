@@ -95,7 +95,7 @@ def crea_proj_tab():
             projets.pop(i)
             st.warning("Projet supprimé")
             st.rerun()
-  
+    
     else:
         st.info("Aucun projet. Créez-en un ci-dessous.")
 
