@@ -14,3 +14,8 @@ création de l'onglet "assignation des équipes" qui permet de :
 
   
 -------------------------Calendrier.py : 
+création de l'onglet calendrier qui permet de :
+  Option 1 :
+    Avoir un diagramme de Gantt des projets en cours avec la possibilité de n'afficher qu'un certain nombre de semaines pour une question de lisibilité.
+  Option 2 :
+    Avoir un calendrier sur lequel s'affichent les absences des employés
