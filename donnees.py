@@ -3,7 +3,7 @@ import streamlit as st
 
 #---------CALENDRIER---------------------------------------------------------------------------------
 #Liste des projets pour calendrier(à lier à excel)
-Projets_gantt = [
+Projets_gantt_defaut = [
     {
         "projet": "Enlèvement au sérail",
         "couleur": "#FF6C6C",
@@ -106,8 +106,10 @@ def init_session_state():
     #Données projets
     if "Data_proj" not in st.session_state:
         st.session_state.Data_proj = {}
-    if "proj" not in st.session_state:
-          st.session_state.proj = {}
+    # Projets Gantt : initialisés depuis les données en dur, modifiables via l'onglet Projets
+    if "Projets_gantt" not in st.session_state:
+        st.session_state.Projets_gantt = Projets_gantt_defaut
+
 
 #------RECUPERER COULEUR PORJ--------------------------------------------------
 def get_couleur_projet(nom_projet):
