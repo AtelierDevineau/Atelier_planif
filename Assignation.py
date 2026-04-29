@@ -9,6 +9,7 @@ from Logique import (
 )
 import pandas as pd
 from Logique import get_segments_charge
+
 from donnees import get_couleur_projet, Ressources_base
     
 # -------------------------------------------------------
@@ -134,7 +135,7 @@ def assignation_tab():
     # --- Choix du projet ---
     projet = st.selectbox(
         "Choisir un projet :",
-        options=[p["Nom"] for p in Projets],
+        options=[p["projet"] for p in st.session_state.Projets_gantt],
         key="choix_projet",
         on_change=marquer_modifie
     )
