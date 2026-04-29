@@ -63,7 +63,7 @@ def crea_proj_tab():
               key= f"end_{i}_{j}", 
               label_visibility="collapsed").isoformat()
           with cols[3]:
-            if st.button("🗑", key= f"del_st_{i}_{j}", help="Supprimer cette tâche"):
+            if st.button("🗑️", key= f"del_st_{i}_{j}", help="Supprimer cette tâche"):
               a_supp = j
         if a_supp is not None:
           sous_taches.pop(a_supp)
