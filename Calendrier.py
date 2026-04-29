@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from streamlit_calendar import calendar
 from datetime import date, timedelta, datetime
-from donnees import Absences_cal, Options_cal
+from donnees import Absences_cal, Options_cal, Projets_gantt_defaut
 
 
 #-------------UTILITAIRES--------------------
@@ -129,7 +129,7 @@ def calendrier_tab():
         nb_semaines = options_semaines[choix_semaines]
 
         # --- Affichage du Gantt ---
-        fig = gantt(Projets_gantt, nb_semaines)
+        fig = gantt(Projets_gantt_defaut, nb_semaines)
         st.plotly_chart(fig, use_container_width=True)
 
     if selection == "Absences":
