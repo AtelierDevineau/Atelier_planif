@@ -78,7 +78,7 @@ def crea_proj_tab():
           sous_taches.append({
             "tache" : "Nouvelle tâche",
             "start" : last_end.isoformat(),
-            "end" (last_end + timedelta(weeks=2)).isoformat(),
+            "end" : (last_end + timedelta(weeks=2)).isoformat(),
           })
           st.rerun()
         #--------------BOUTONS--------------------------
