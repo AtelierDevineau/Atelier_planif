@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from streamlit_calendar import calendar
 from datetime import date, timedelta, datetime
-from donnees import Projets_gantt, Absences_cal, Options_cal
+from donnees import Absences_cal, Options_cal
 
 
 #-------------UTILITAIRES--------------------
