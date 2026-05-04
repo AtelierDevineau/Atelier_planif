@@ -109,15 +109,17 @@ def init_session_state():
     # Projets Gantt : initialisés depuis les données en dur, modifiables via l'onglet Projets
     if "Projets_gantt" not in st.session_state:
         st.session_state.Projets_gantt = Projets_gantt_defaut
+    # Message de succès persisté entre reruns
+    if "msg_succes" not in st.session_state:
+        st.session_state.msg_succes = None
 
-
-#------RECUPERER COULEUR PORJ--------------------------------------------------
+#------RECUPERER COULEUR PROJET--------------------------------------------------
 def get_couleur_projet(nom_projet):
-    """Retourne la couleur hex d'un projet, gris par défaut"""
-    for p in Projets_gantt:
+    """Retourne la couleur hex d'un projet depuis le session_state, gris par défaut"""
+    for p in st.session_state.Projets_gantt:
         if p["projet"] == nom_projet:
             return p["couleur"]
-    return("#CCCCCC") #projet pas trouvé
+    return "#CCCCCC"  # projet pas trouvé
 
 
 
