@@ -19,6 +19,10 @@ def crea_proj_tab():
     st.subheader("Gestion des projets")
     projets = st.session_state.Projets_gantt
 
+    #Affichage message succès persisté (survit au rerun)
+    if st.session_state.get("msg_succes"):
+        st.session_state.msg_succes= None
+
     # ---------- LISTE PROJETS EXISTANTS ------------
     if projets:
         st.subheader("Projets existants")
@@ -123,12 +127,13 @@ def crea_proj_tab():
                         projets[i]["projet"] = new_proj
                         projets[i]["couleur"] = new_color
                         projets[i]["sous_taches"] = sous_taches
-                        st.success(f"Projet « {new_proj} » mis à jour.")
+                        st.session_state[key_expander] = True
+                        st.session_state.msg_succes = f"Projet « {new_proj} » mis à jour."
                         st.rerun()
                 with col_del:
                     if st.button("🗑 Supprimer ce projet", key=f"suppr_{i}", type="secondary"):
                         projets.pop(i)
-                        st.warning("Projet supprimé")
+                        st.session_state.msg_succes = "Projet supprimé."
                         st.rerun()
 
     # ----------------- CREATION NOUVEAU PROJET ----------------------
@@ -157,5 +162,6 @@ def crea_proj_tab():
                 "couleur": couleur_defaut,
                 "sous_taches": []
             })
-            st.success(f"Projet « {nom_new.strip()} » créé ! Dépliez-le ci-dessus pour ajouter des sous-tâches et choisir sa couleur.")
+            st.session_state.msg_succes = f"Projet « {nom_new.strip()} » créé ! Dépliez-le ci-dessus pour ajouter des sous-tâches et choisir sa couleur."
             st.rerun()
+
