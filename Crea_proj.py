@@ -19,15 +19,16 @@ def crea_proj_tab():
     st.subheader("Gestion des projets")
     projets = st.session_state.Projets_gantt
 
-    #Affichage message succès persisté (survit au rerun)
+    # Affichage du message de succès persisté (survit au rerun)
     if st.session_state.get("msg_succes"):
-        st.session_state.msg_succes= None
+        st.success(st.session_state.msg_succes)
+        st.session_state.msg_succes = None
 
     # ---------- LISTE PROJETS EXISTANTS ------------
     if projets:
         st.subheader("Projets existants")
 
-        # Couleurs déjà utilisées par les autres projets (pour le selectbox de chaque expander)
+        # Couleurs déjà utilisées (pour filtrer le selectbox de chaque expander)
         couleurs_prises = {p["couleur"] for p in projets}
 
         for i, projet in enumerate(projets):
@@ -52,7 +53,7 @@ def crea_proj_tab():
                     key=f"nom_{i}"
                 )
 
-                # Sélecteur de couleur : on exclut les couleurs prises par les AUTRES projets
+                # Sélecteur couleur : on exclut les couleurs prises par les AUTRES projets
                 couleurs_disponibles = {
                     nom: hex_
                     for nom, hex_ in COULEURS_PALETTE.items()
@@ -140,11 +141,11 @@ def crea_proj_tab():
     st.divider()
     st.subheader("Nouveau projet")
 
-    # Couleurs déjà prises → on choisit la première couleur libre comme défaut
+    # Première couleur libre comme défaut
     couleurs_prises = {p["couleur"] for p in projets}
     couleur_defaut = next(
         (hex_ for hex_ in COULEURS_PALETTE.values() if hex_ not in couleurs_prises),
-        list(COULEURS_PALETTE.values())[0]  # fallback si toutes prises
+        list(COULEURS_PALETTE.values())[0]
     )
 
     with st.form("form_nouveau_projet", clear_on_submit=True):
@@ -164,4 +165,3 @@ def crea_proj_tab():
             })
             st.session_state.msg_succes = f"Projet « {nom_new.strip()} » créé ! Dépliez-le ci-dessus pour ajouter des sous-tâches et choisir sa couleur."
             st.rerun()
-
