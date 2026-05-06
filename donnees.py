@@ -1,68 +1,78 @@
 import streamlit as st
+import json
+import requests
+import base64
+
+#---------GITHUB---------------------------------------------------------------------------------
+
+GITHUB_REPO = st.secrets["GITHUB_REPO"]
+GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
+GITHUB_FILE = "projets.json"
+GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE}"
+
+def _headers():
+    return {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+def charger_projets_github():
+    """Lit projets.json depuis le repo GitHub et retourne la liste + le sha du fichier"""
+    response = requests.get(GITHUB_API, headers=_headers())
+    if response.status_code == 200:
+        data = response.json()
+        contenu = base64.b64decode(data["content"]).decode("utf-8")
+        return json.loads(contenu), data["sha"]
+    else:
+        st.error(f"Erreur de lecture GitHub ({response.status_code})")
+        return [], None
+
+def sauvegarder_projets_github(projets, sha):
+    """Écrit la liste de projets dans projets.json sur GitHub et retourne le nouveau sha"""
+    contenu_encode = base64.b64encode(
+        json.dumps(projets, ensure_ascii=False, indent=4).encode("utf-8")
+    ).decode("utf-8")
+
+    payload = {
+        "message": "Mise à jour des projets via l'app",
+        "content": contenu_encode,
+        "sha": sha
+    }
+
+    response = requests.put(GITHUB_API, headers=_headers(), json=payload)
+    if response.status_code in (200, 201):
+        return response.json()["content"]["sha"]
+    else:
+        st.error(f"Erreur de sauvegarde GitHub ({response.status_code})")
+        return sha
 
 
 #---------CALENDRIER---------------------------------------------------------------------------------
-#Liste des projets pour calendrier(à lier à excel)
-Projets_gantt_defaut = [
-    {
-        "projet": "Enlèvement au sérail",
-        "couleur": "#FF6C6C",
-        "sous_taches": [
-            {"tache": "Conception", "start": "2026-01-01", "end": "2026-02-01"},
-            {"tache": "Fabrication décors", "start": "2026-02-01", "end": "2026-03-15"},
-            {"tache": "Répétitions", "start": "2026-03-15", "end": "2026-04-20"},
-            {"tache": "Représentations", "start": "2026-04-20", "end": "2026-05-12"},
-        ]
-    },
-    {
-        "projet": "Manon Lescaut",
-        "couleur": "#FFBD45",
-        "sous_taches": [
-            {"tache": "Conception", "start": "2026-02-03", "end": "2026-03-15"},
-            {"tache": "Fabrication décors", "start": "2026-03-15", "end": "2026-05-01"},
-            {"tache": "Répétitions", "start": "2026-05-01", "end": "2026-08-01"},
-            {"tache": "Représentations", "start": "2026-08-01", "end": "2026-10-16"},
-        ]
-    },
-    {
-        "projet": "Brundibar",
-        "couleur": "#63CDEB",
-        "sous_taches": [
-            {"tache": "Conception", "start": "2026-03-02", "end": "2026-03-20"},
-            {"tache": "Fabrication décors", "start": "2026-03-20", "end": "2026-04-15"},
-            {"tache": "Répétitions", "start": "2026-04-15", "end": "2026-05-05"},
-            {"tache": "Représentations", "start": "2026-05-05", "end": "2026-05-15"},
-        ]
-    },
-]
 
-
-#Liste des absences pour calendrier (à lier à excel)
 Absences_cal = [
     {
-     "title" : "Abraham Lincoln",
-     "start" : "2026-04-15",
-     "end" : "2026-04-25",
-    "backgroundColor" : "#FF6C6C",
-    "borderColor":"#FF6C6C"
-     },
+        "title": "Abraham Lincoln",
+        "start": "2026-04-15",
+        "end": "2026-04-25",
+        "backgroundColor": "#FF6C6C",
+        "borderColor": "#FF6C6C"
+    },
     {
-     "title" : "Aya Nakamura",
-     "start" : "2026-04-21",
-     "end" : "2026-04-23",
-    "backgroundColor":"#FFBD45",
-    "borderColor":"#FFBD45"    
-     },
+        "title": "Aya Nakamura",
+        "start": "2026-04-21",
+        "end": "2026-04-23",
+        "backgroundColor": "#FFBD45",
+        "borderColor": "#FFBD45"
+    },
     {
-     "title" : "Charlie Chaplin",
-     "start" : "2026-04-02",
-     "end" : "2026-04-12",
-    "backgroundColor" : "#63CDEB",
-    "borderColor":"#63CDEB"
-     }
-    ]
+        "title": "Charlie Chaplin",
+        "start": "2026-04-02",
+        "end": "2026-04-12",
+        "backgroundColor": "#63CDEB",
+        "borderColor": "#63CDEB"
+    }
+]
 
-# Options calendrier
 Options_cal = {
     "initialView": "dayGridMonth",
     "locale": "fr",
@@ -74,42 +84,40 @@ Options_cal = {
 }
 
 #----------------RESSOURCES--------------------------------------------------------------------------
-#Liste des Ressources de base
-Ressources_base= [
-    {"Nom" : "Abraham Lincoln", "Dispo_base" : 100},
-    { "Nom":"Albert Einstein", "Dispo_base" : 70},
-    {"Nom" : "Marie Curie", "Dispo_base" : 100},
-    {"Nom" : "Aya Nakamura", "Dispo_base": 100},
-    {"Nom" : "Charlie Chaplin", "Dispo_base" : 25}
-    ]
+Ressources_base = [
+    {"Nom": "Abraham Lincoln", "Dispo_base": 100},
+    {"Nom": "Albert Einstein", "Dispo_base": 70},
+    {"Nom": "Marie Curie", "Dispo_base": 100},
+    {"Nom": "Aya Nakamura", "Dispo_base": 100},
+    {"Nom": "Charlie Chaplin", "Dispo_base": 25}
+]
 
 #-------PROJETS-----------------------------------------------------------------------------------
-#Liste des Projets :
 Projets = [
-    {"Nom" : "L'enlèvement au sérail","Client" : "TCE"},
-    {"Nom" : "Manon Lescaut", "Client" : "TCE"},
-    {"Nom" : "Brundibar", "Client": "L'opéra Comique"}
-    ]
+    {"Nom": "L'enlèvement au sérail", "Client": "TCE"},
+    {"Nom": "Manon Lescaut", "Client": "TCE"},
+    {"Nom": "Brundibar", "Client": "L'opéra Comique"}
+]
+
 #-------INITIALISATION SESSION STATE-----------------------------------------------------------------------------------
 
 def init_session_state():
     """Initialise les variables de session si elles n'existent pas encore"""
-    #Données ressources
     if "Ressources" not in st.session_state:
-        st.session_state.Ressources= [
-        {"Nom" : "Abraham Lincoln", "Dispo_restante" : 100},
-        { "Nom":"Albert Einstein", "Dispo_restante" : 70},
-        {"Nom" : "Marie Curie", "Dispo_restante" : 100},
-        {"Nom" : "Aya Nakamura", "Dispo_restante": 100},
-        {"Nom" : "Charlie Chaplin", "Dispo_restante" : 25}
+        st.session_state.Ressources = [
+            {"Nom": "Abraham Lincoln", "Dispo_restante": 100},
+            {"Nom": "Albert Einstein", "Dispo_restante": 70},
+            {"Nom": "Marie Curie", "Dispo_restante": 100},
+            {"Nom": "Aya Nakamura", "Dispo_restante": 100},
+            {"Nom": "Charlie Chaplin", "Dispo_restante": 25}
         ]
-    #Données projets
     if "Data_proj" not in st.session_state:
         st.session_state.Data_proj = {}
-    # Projets Gantt : initialisés depuis les données en dur, modifiables via l'onglet Projets
+    # Projets Gantt : chargés depuis GitHub au premier démarrage de la session
     if "Projets_gantt" not in st.session_state:
-        st.session_state.Projets_gantt = Projets_gantt_defaut
-    # Message de succès persisté entre reruns
+        projets, sha = charger_projets_github()
+        st.session_state.Projets_gantt = projets
+        st.session_state.projets_sha = sha  # sha nécessaire pour les mises à jour GitHub
     if "msg_succes" not in st.session_state:
         st.session_state.msg_succes = None
 
@@ -119,9 +127,4 @@ def get_couleur_projet(nom_projet):
     for p in st.session_state.Projets_gantt:
         if p["projet"] == nom_projet:
             return p["couleur"]
-    return "#CCCCCC"  # projet pas trouvé
-
-
-
-
-
+    return "#CCCCCC"
