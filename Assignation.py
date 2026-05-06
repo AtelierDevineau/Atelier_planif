@@ -10,7 +10,7 @@ from Logique import (
 import pandas as pd
 from Logique import get_segments_charge
 
-from donnees import get_couleur_projet, Ressources_base
+from donnees import get_couleur_projet, sauvegarder_ressources_github
     
 # -------------------------------------------------------
 # FONCTIONS D'AFFICHAGE
