@@ -1,8 +1,8 @@
 import streamlit as st
 from datetime import date, timedelta
+from donnees import sauvegarder_projets_github
 
 #-------------AFFICHAGE----------------------
-# Palette de couleurs proposées
 COULEURS_PALETTE = {
     "Rouge":    "#FF6C6C",
     "Orange":   "#FFBD45",
@@ -28,13 +28,11 @@ def crea_proj_tab():
     if projets:
         st.subheader("Projets existants")
 
-        # Couleurs déjà utilisées (pour filtrer le selectbox de chaque expander)
         couleurs_prises = {p["couleur"] for p in projets}
 
         for i, projet in enumerate(projets):
             couleur = projet["couleur"]
 
-            # Persistance de l'état ouvert/fermé de l'expander
             key_expander = f"expander_open_{i}"
             if key_expander not in st.session_state:
                 st.session_state[key_expander] = False
@@ -43,7 +41,6 @@ def crea_proj_tab():
                 f"**{projet['projet']}** - {len(projet['sous_taches'])} sous-tache(s)",
                 expanded=st.session_state[key_expander]
             ):
-                # Réinitialiser le flag après ouverture
                 st.session_state[key_expander] = False
 
                 # --------------- EDITION DU PROJET ---------------
@@ -53,7 +50,6 @@ def crea_proj_tab():
                     key=f"nom_{i}"
                 )
 
-                # Sélecteur couleur : on exclut les couleurs prises par les AUTRES projets
                 couleurs_disponibles = {
                     nom: hex_
                     for nom, hex_ in COULEURS_PALETTE.items()
@@ -128,20 +124,29 @@ def crea_proj_tab():
                         projets[i]["projet"] = new_proj
                         projets[i]["couleur"] = new_color
                         projets[i]["sous_taches"] = sous_taches
+                        # Sauvegarde sur GitHub
+                        nouveau_sha = sauvegarder_projets_github(
+                            projets, st.session_state.projets_sha
+                        )
+                        st.session_state.projets_sha = nouveau_sha
                         st.session_state[key_expander] = True
-                        st.session_state.msg_succes = f"Projet « {new_proj} » mis à jour."
+                        st.session_state.msg_succes = f"Projet « {new_proj} » mis à jour et sauvegardé."
                         st.rerun()
                 with col_del:
                     if st.button("🗑 Supprimer ce projet", key=f"suppr_{i}", type="secondary"):
                         projets.pop(i)
-                        st.session_state.msg_succes = "Projet supprimé."
+                        # Sauvegarde sur GitHub
+                        nouveau_sha = sauvegarder_projets_github(
+                            projets, st.session_state.projets_sha
+                        )
+                        st.session_state.projets_sha = nouveau_sha
+                        st.session_state.msg_succes = "Projet supprimé et sauvegardé."
                         st.rerun()
 
     # ----------------- CREATION NOUVEAU PROJET ----------------------
     st.divider()
     st.subheader("Nouveau projet")
 
-    # Première couleur libre comme défaut
     couleurs_prises = {p["couleur"] for p in projets}
     couleur_defaut = next(
         (hex_ for hex_ in COULEURS_PALETTE.values() if hex_ not in couleurs_prises),
@@ -163,5 +168,10 @@ def crea_proj_tab():
                 "couleur": couleur_defaut,
                 "sous_taches": []
             })
-            st.session_state.msg_succes = f"Projet « {nom_new.strip()} » créé ! Dépliez-le ci-dessus pour ajouter des sous-tâches et choisir sa couleur."
+            # Sauvegarde sur GitHub
+            nouveau_sha = sauvegarder_projets_github(
+                projets, st.session_state.projets_sha
+            )
+            st.session_state.projets_sha = nouveau_sha
+            st.session_state.msg_succes = f"Projet « {nom_new.strip()} » créé et sauvegardé ! Dépliez-le ci-dessus pour ajouter des sous-tâches et choisir sa couleur."
             st.rerun()
