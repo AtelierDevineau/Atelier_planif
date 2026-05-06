@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from streamlit_calendar import calendar
 from datetime import date, timedelta, datetime
-from donnees import Absences_cal, Options_cal, Projets_gantt_defaut
+from donnees import Absences_cal, Options_cal
 
 
 #-------------UTILITAIRES--------------------
@@ -28,16 +28,14 @@ def semaines_entre(date_debut_str, date_fin_str):
 
 
 #-------------CREATION GANTT--------------------
-def gantt(projets_data,nb_semaines):
+def gantt(projets_data, nb_semaines):
     """Construction d'un diagramme de Gantt Plotly à partir de la liste de dicos Projets_gantt"""
     fig = go.Figure()
     
-    # Fenêtre de temps : aujourd'hui → aujourd'hui + nb_semaines
     today = date.today()
     x_min = today.isoformat()
     x_max = (today + timedelta(weeks=nb_semaines)).isoformat()
     
-    # Le premier projet doit être en haut, on parcourt dans le sens inverse
     for projet in reversed(projets_data):
         nom_projet = projet["projet"]
         couleur = projet["couleur"]
@@ -46,7 +44,7 @@ def gantt(projets_data,nb_semaines):
             duree_ms = (
                 date.fromisoformat(sous_tache["end"]) -
                 date.fromisoformat(sous_tache["start"])
-            ).days * 24 * 3600 * 1000  # durée en millisecondes
+            ).days * 24 * 3600 * 1000
             base_ms = to_timestamp_ms(sous_tache["start"])
             fig.add_trace(go.Bar(
                 name=nom_projet,
@@ -64,10 +62,8 @@ def gantt(projets_data,nb_semaines):
                 showlegend=False,
             ))
 
-    # Ticks de l'axe X sur la fenêtre visible
     ticks_dates, ticks_labels = semaines_entre(x_min, x_max)
 
-    # Légende manuelle (un carré coloré par projet)
     for projet in projets_data:
         fig.add_trace(go.Scatter(
             x=[None], y=[None],
@@ -118,18 +114,17 @@ def calendrier_tab():
         default="Projets"
     )
     if selection == "Projets":
-        # --- Menu : nombre de semaines affichées ---
         options_semaines = {"4 semaines": 4, "8 semaines": 8, "12 semaines": 12}
         choix_semaines = st.segmented_control(
             "Fenêtre d'affichage :",
             options=list(options_semaines.keys()),
             selection_mode="single",
-            default= "8 semaines"  # 8 semaines par défaut
+            default="8 semaines"
         )
         nb_semaines = options_semaines[choix_semaines]
 
-        # --- Affichage du Gantt ---
-        fig = gantt(Projets_gantt_defaut, nb_semaines)
+        # On lit depuis le session_state pour avoir les projets à jour
+        fig = gantt(st.session_state.Projets_gantt, nb_semaines)
         st.plotly_chart(fig, use_container_width=True)
 
     if selection == "Absences":
