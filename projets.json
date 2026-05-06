@@ -3,30 +3,52 @@
         "projet": "Enlèvement au sérail",
         "couleur": "#FF6C6C",
         "sous_taches": [
-            {"tache": "Conception", "start": "2026-01-01", "end": "2026-02-01"},
-            {"tache": "Fabrication décors", "start": "2026-02-01", "end": "2026-03-15"},
-            {"tache": "Répétitions", "start": "2026-03-15", "end": "2026-04-20"},
-            {"tache": "Représentations", "start": "2026-04-20", "end": "2026-05-12"}
+            {
+                "tache": "Conception",
+                "start": "2026-01-01",
+                "end": "2026-02-01"
+            },
+            {
+                "tache": "Fabrication décors",
+                "start": "2026-02-01",
+                "end": "2026-03-15"
+            },
+            {
+                "tache": "Répétitions",
+                "start": "2026-03-15",
+                "end": "2026-04-20"
+            },
+            {
+                "tache": "Représentations",
+                "start": "2026-04-20",
+                "end": "2026-05-12"
+            }
         ]
     },
     {
         "projet": "Manon Lescaut",
         "couleur": "#FFBD45",
         "sous_taches": [
-            {"tache": "Conception", "start": "2026-02-03", "end": "2026-03-15"},
-            {"tache": "Fabrication décors", "start": "2026-03-15", "end": "2026-05-01"},
-            {"tache": "Répétitions", "start": "2026-05-01", "end": "2026-08-01"},
-            {"tache": "Représentations", "start": "2026-08-01", "end": "2026-10-16"}
-        ]
-    },
-    {
-        "projet": "Brundibar",
-        "couleur": "#63CDEB",
-        "sous_taches": [
-            {"tache": "Conception", "start": "2026-03-02", "end": "2026-03-20"},
-            {"tache": "Fabrication décors", "start": "2026-03-20", "end": "2026-04-15"},
-            {"tache": "Répétitions", "start": "2026-04-15", "end": "2026-05-05"},
-            {"tache": "Représentations", "start": "2026-05-05", "end": "2026-05-15"}
+            {
+                "tache": "Conception",
+                "start": "2026-02-03",
+                "end": "2026-03-15"
+            },
+            {
+                "tache": "Fabrication décors",
+                "start": "2026-03-15",
+                "end": "2026-05-01"
+            },
+            {
+                "tache": "Répétitions",
+                "start": "2026-05-01",
+                "end": "2026-08-01"
+            },
+            {
+                "tache": "Représentations",
+                "start": "2026-08-01",
+                "end": "2026-10-16"
+            }
         ]
     }
 ]
