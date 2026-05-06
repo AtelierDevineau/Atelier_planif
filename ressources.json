@@ -1,0 +1,7 @@
+[
+    {"Nom": "Abraham Lincoln", "Poste": "Construction", "Dispo_base": 100},
+    {"Nom": "Albert Einstein", "Poste": "BE", "Dispo_base": 70},
+    {"Nom": "Marie Curie", "Poste": "Serrurerie", "Dispo_base": 100},
+    {"Nom": "Aya Nakamura", "Poste": "Déco", "Dispo_base": 100},
+    {"Nom": "Charlie Chaplin", "Poste": "Administration", "Dispo_base": 25}
+]
