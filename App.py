@@ -3,7 +3,7 @@ from donnees import init_session_state
 from Calendrier import calendrier_tab
 from Assignation import assignation_tab
 from Crea_proj import crea_proj_tab
-
+from Crea_ress import crea_ress_tab
 # ── Init ──────────────────────────────────────────────────────────────────────
 init_session_state()
 
@@ -22,6 +22,9 @@ with Calendrier:
 
 with Crea_proj:
     crea_proj_tab()
+
+with Crea_ress:
+    crea_ress_tab()
 
 with Assignation:
     assignation_tab()
