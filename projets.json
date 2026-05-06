@@ -54,6 +54,12 @@
     {
         "projet": "Brundibar",
         "couleur": "#63CDEB",
-        "sous_taches": []
+        "sous_taches": [
+            {
+                "tache": "Etude",
+                "start": "2026-01-09",
+                "end": "2026-05-15"
+            }
+        ]
     }
 ]
