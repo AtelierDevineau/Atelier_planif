@@ -7,8 +7,6 @@ import base64
 
 GITHUB_REPO = st.secrets["GITHUB_REPO"]
 GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
-GITHUB_FILE = "projets.json"
-GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE}"
 
 def _headers():
     return {
@@ -16,35 +14,50 @@ def _headers():
         "Accept": "application/vnd.github.v3+json"
     }
 
-def charger_projets_github():
-    """Lit projets.json depuis le repo GitHub et retourne la liste + le sha du fichier"""
-    response = requests.get(GITHUB_API, headers=_headers())
+def _api_url(filename):
+    return f"https://api.github.com/repos/{GITHUB_REPO}/contents/{filename}"
+
+def _charger_json_github(filename):
+    """Lit un fichier JSON depuis le repo GitHub, retourne (données, sha)"""
+    response = requests.get(_api_url(filename), headers=_headers())
     if response.status_code == 200:
         data = response.json()
         contenu = base64.b64decode(data["content"]).decode("utf-8")
         return json.loads(contenu), data["sha"]
     else:
-        st.error(f"Erreur de lecture GitHub ({response.status_code})")
+        st.error(f"Erreur de lecture GitHub ({response.status_code}) pour {filename}")
         return [], None
 
-def sauvegarder_projets_github(projets, sha):
-    """Écrit la liste de projets dans projets.json sur GitHub et retourne le nouveau sha"""
+def _sauvegarder_json_github(filename, donnees, sha):
+    """Écrit un fichier JSON sur GitHub, retourne le nouveau sha"""
     contenu_encode = base64.b64encode(
-        json.dumps(projets, ensure_ascii=False, indent=4).encode("utf-8")
+        json.dumps(donnees, ensure_ascii=False, indent=4).encode("utf-8")
     ).decode("utf-8")
-
     payload = {
-        "message": "Mise à jour des projets via l'app",
+        "message": f"Mise à jour de {filename} via l'app",
         "content": contenu_encode,
         "sha": sha
     }
-
-    response = requests.put(GITHUB_API, headers=_headers(), json=payload)
+    response = requests.put(_api_url(filename), headers=_headers(), json=payload)
     if response.status_code in (200, 201):
         return response.json()["content"]["sha"]
     else:
-        st.error(f"Erreur de sauvegarde GitHub ({response.status_code})")
+        st.error(f"Erreur de sauvegarde GitHub ({response.status_code}) pour {filename}")
         return sha
+
+# Fonctions publiques projets
+def charger_projets_github():
+    return _charger_json_github("projets.json")
+
+def sauvegarder_projets_github(projets, sha):
+    return _sauvegarder_json_github("projets.json", projets, sha)
+
+# Fonctions publiques ressources
+def charger_ressources_github():
+    return _charger_json_github("ressources.json")
+
+def sauvegarder_ressources_github(ressources, sha):
+    return _sauvegarder_json_github("ressources.json", ressources, sha)
 
 
 #---------CALENDRIER---------------------------------------------------------------------------------
@@ -83,15 +96,6 @@ Options_cal = {
     }
 }
 
-#----------------RESSOURCES--------------------------------------------------------------------------
-Ressources_base = [
-    {"Nom": "Abraham Lincoln", "Dispo_base": 100},
-    {"Nom": "Albert Einstein", "Dispo_base": 70},
-    {"Nom": "Marie Curie", "Dispo_base": 100},
-    {"Nom": "Aya Nakamura", "Dispo_base": 100},
-    {"Nom": "Charlie Chaplin", "Dispo_base": 25}
-]
-
 #-------PROJETS-----------------------------------------------------------------------------------
 Projets = [
     {"Nom": "L'enlèvement au sérail", "Client": "TCE"},
@@ -103,21 +107,31 @@ Projets = [
 
 def init_session_state():
     """Initialise les variables de session si elles n'existent pas encore"""
+
+    # Ressources chargées depuis GitHub (contiennent Nom, Poste, Dispo_base)
+    if "Ressources_base" not in st.session_state:
+        ressources, sha = charger_ressources_github()
+        st.session_state.Ressources_base = ressources
+        st.session_state.ressources_sha = sha
+
+    # Ressources avec dispo restante : construites depuis Ressources_base
     if "Ressources" not in st.session_state:
         st.session_state.Ressources = [
-            {"Nom": "Abraham Lincoln", "Dispo_restante": 100},
-            {"Nom": "Albert Einstein", "Dispo_restante": 70},
-            {"Nom": "Marie Curie", "Dispo_restante": 100},
-            {"Nom": "Aya Nakamura", "Dispo_restante": 100},
-            {"Nom": "Charlie Chaplin", "Dispo_restante": 25}
+            {"Nom": r["Nom"], "Dispo_restante": r["Dispo_base"]}
+            for r in st.session_state.Ressources_base
         ]
+
+    # Données projets
     if "Data_proj" not in st.session_state:
         st.session_state.Data_proj = {}
-    # Projets Gantt : chargés depuis GitHub au premier démarrage de la session
+
+    # Projets Gantt chargés depuis GitHub
     if "Projets_gantt" not in st.session_state:
         projets, sha = charger_projets_github()
         st.session_state.Projets_gantt = projets
-        st.session_state.projets_sha = sha  # sha nécessaire pour les mises à jour GitHub
+        st.session_state.projets_sha = sha
+
+    # Message de succès persisté entre reruns
     if "msg_succes" not in st.session_state:
         st.session_state.msg_succes = None
 
